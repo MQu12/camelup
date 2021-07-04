@@ -6,8 +6,11 @@ Created on Sun Jul  4 15:55:25 2021
 """
 
 from camels import racing_camel, crazy_camel
+import random
 
 track_length = 16
+max_roll = 3
+min_roll = 1
 
 #create camels
 camel_list = []
@@ -72,3 +75,65 @@ def get_number_of_camel_types(camel_list,camel_type):
 set_stack(camel_list)
 racing_camel_count = get_number_of_camel_types(camel_list,racing_camel)
 crazy_camel_count = get_number_of_camel_types(camel_list,crazy_camel)
+
+def move_camel_to(camel_list,camel_no,final_pos):
+    '''
+    Move camel id in list to a particular location.
+    Takes into account camel positions in stack.
+    Camels above target are carried and the substack is put on top of a
+    stack at the destination.
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels.
+    camel_no : int
+        Camel id.
+    final_pos : int
+        Target square.
+
+    Returns
+    -------
+    camel_list : list[camel]
+        Updated list.
+
+    '''
+
+    target_camel_stack_pos = camel_list[camel_no].stack_position
+    init_camel_pos = camel_list[camel_no].position
+    
+    camels_to_move = []
+    camels_at_destination = 0
+    
+    for camel in camel_list:
+        
+        if camel.position == init_camel_pos and camel.stack_position >= target_camel_stack_pos:
+            camels_to_move.append(camel.id)
+            
+        if camel.position == final_pos:
+            camels_at_destination += 1
+            
+    for camel_id in camels_to_move:
+        camel_list[camel_id].position = final_pos
+        camel_list[camel_id].stack_position += (camels_at_destination - target_camel_stack_pos)
+    
+    return camel_list
+
+def advance_camel(camel_list,racing_camel_count,camels_to_move):
+    
+    camel_no = camels_to_move[random.randint(0,len(camels_to_move)-1)]
+    
+    advancement = random.randint(min_roll,max_roll)
+    
+    if camel_no != 'crazy':
+        # advance racing camel
+        
+        #camel_list[camel_no]
+        pass
+    
+    else:
+        # advance crazy camel
+        crazy_camel_no = random.randint(0,crazy_camel_count-1)
+        pass
+    
+    
