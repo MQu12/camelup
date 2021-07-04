@@ -30,4 +30,4 @@ def set_stack(camel_list):
         camel_list[i].stack_position = camels_on_tile
         positions.append(camel_list[i].position)
 
-set_stack(camel_list)        
+set_stack(camel_list)
