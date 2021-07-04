@@ -8,6 +8,7 @@ Created on Sun Jul  4 15:55:25 2021
 from camels import racing_camel, crazy_camel
 import matplotlib.pyplot as plt
 import random
+import pandas as pd
 
 track_length = 16
 leg_length = 5
@@ -170,7 +171,37 @@ def advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move
     return camel_list, camels_to_move
     
 def get_leader(camel_list):
-    pass
+    '''
+    Get camel at the front
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels.
+
+    Returns
+    -------
+    leading_camel_id : int
+        ID of the leading camel.
+
+    '''
+    
+    largest_forward = 0
+    largest_upward = 0
+    leading_camel_id = 0
+    
+    for camel in camel_list:
+        if type(camel) == crazy_camel:
+            continue
+        if camel.position > largest_forward or camel.position == largest_forward and camel.stack_position > largest_upward:
+            largest_forward = camel.position
+            largest_upward = camel.stack_position
+            leading_camel_id = camel.id
+        else:
+            continue
+        
+    return leading_camel_id
+            
     
 def plot_state(camel_list):
     '''
@@ -206,6 +237,7 @@ plot_state(camel_list)
 camels_to_move = [i for i in range(racing_camel_count)]
 camels_to_move.append('crazy')
 
-camel_list, camels_to_move = advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move)
-
-plot_state(camel_list)
+for i in range(5):
+    camel_list, camels_to_move = advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move)
+    print(get_leader(camel_list))
+    plot_state(camel_list)
