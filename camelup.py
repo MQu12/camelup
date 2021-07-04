@@ -6,11 +6,15 @@ Created on Sun Jul  4 15:55:25 2021
 """
 
 from camels import racing_camel, crazy_camel
+import matplotlib.pyplot as plt
 import random
 
 track_length = 16
 max_roll = 3
 min_roll = 1
+
+racing_colours = ['red','green','orange','blue','purple']
+crazy_colours = ['black','white']
 
 #create camels
 camel_list = []
@@ -136,4 +140,37 @@ def advance_camel(camel_list,racing_camel_count,camels_to_move):
         crazy_camel_no = random.randint(0,crazy_camel_count-1)
         pass
     
+def plot_state(camel_list):
+    '''
+    Plot the positions of each camel
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels.
+
+    Returns
+    -------
+    None.
+
+    '''
     
+    for camel in camel_list:
+        
+        if type(camel) == racing_camel:
+            col = racing_colours[camel.id]
+            plt.scatter(camel.position,camel.stack_position,color=col)
+            
+        else:
+            col = crazy_colours[camel.id]
+            plt.scatter(camel.position,camel.stack_position,color=col,edgecolors='black')
+            
+    plt.xlim(-1,track_length)
+    plt.ylim(-0.5,7.5)
+    plt.show()
+    
+plot_state(camel_list)
+
+camel_list = move_camel_to(camel_list,0,1)
+
+plot_state(camel_list)
