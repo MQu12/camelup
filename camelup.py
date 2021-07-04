@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import random
 
 track_length = 16
+leg_length = 5
 max_roll = 3
 min_roll = 1
 
@@ -109,10 +110,10 @@ def move_camel_to(camel_list,camel_no,final_pos):
     camels_to_move = []
     camels_at_destination = 0
     
-    for camel in camel_list:
+    for i,camel in enumerate(camel_list):
         
         if camel.position == init_camel_pos and camel.stack_position >= target_camel_stack_pos:
-            camels_to_move.append(camel.id)
+            camels_to_move.append(i)
             
         if camel.position == final_pos:
             camels_at_destination += 1
@@ -123,22 +124,53 @@ def move_camel_to(camel_list,camel_no,final_pos):
     
     return camel_list
 
-def advance_camel(camel_list,racing_camel_count,camels_to_move):
+def advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move):
+    '''
+    Advance a camel at random
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels.
+    racing_camel_count : int
+        Number of racing camels.
+    crazy_camel_count : int
+        Number of crazy camels.
+    camels_to_move : list
+        List of camels yet to move.
+
+    Returns
+    -------
+    camel_list : list[camel]
+        Updated list of camels.
+    camels_to_move : list
+        Same as input list but with moved camel removed.
+
+    '''
     
     camel_no = camels_to_move[random.randint(0,len(camels_to_move)-1)]
     
-    advancement = random.randint(min_roll,max_roll)
+    roll = random.randint(min_roll,max_roll)
     
     if camel_no != 'crazy':
         # advance racing camel
+        camel = camel_list[camel_no]
+        final_pos = camel.position + roll
+        camel_list = move_camel_to(camel_list, camel_no, final_pos)
         
-        #camel_list[camel_no]
-        pass
-    
     else:
         # advance crazy camel
         crazy_camel_no = random.randint(0,crazy_camel_count-1)
-        pass
+        camel = camel_list[racing_camel_count+crazy_camel_no]
+        final_pos = camel.position - roll
+        camel_list = move_camel_to(camel_list, racing_camel_count+crazy_camel_no, final_pos)
+    
+    camels_to_move.remove(camel_no)
+    
+    return camel_list, camels_to_move
+    
+def get_leader(camel_list):
+    pass
     
 def plot_state(camel_list):
     '''
@@ -171,6 +203,9 @@ def plot_state(camel_list):
     
 plot_state(camel_list)
 
-camel_list = move_camel_to(camel_list,0,1)
+camels_to_move = [i for i in range(racing_camel_count)]
+camels_to_move.append('crazy')
+
+camel_list, camels_to_move = advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move)
 
 plot_state(camel_list)
