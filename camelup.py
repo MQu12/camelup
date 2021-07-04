@@ -21,6 +21,19 @@ camel_list.append( crazy_camel(0,15) )
 camel_list.append( crazy_camel(1,14) )
 
 def set_stack(camel_list):
+    '''
+    Set the stack positions of each camel
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels
+
+    Returns
+    -------
+    None.
+
+    '''
     
     positions = []
     
@@ -30,4 +43,32 @@ def set_stack(camel_list):
         camel_list[i].stack_position = camels_on_tile
         positions.append(camel_list[i].position)
 
+def get_number_of_camel_types(camel_list,camel_type):
+    '''
+    Count the amount of a type of camel
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels
+    camel_type : class(camel)
+        Type of camel to count
+
+    Returns
+    -------
+    count : int
+        Number of type of camel
+
+    '''
+    
+    count = 0
+    
+    for camel in camel_list:
+        if type(camel) == camel_type:
+            count += 1
+            
+    return count
+
 set_stack(camel_list)
+racing_camel_count = get_number_of_camel_types(camel_list,racing_camel)
+crazy_camel_count = get_number_of_camel_types(camel_list,crazy_camel)
