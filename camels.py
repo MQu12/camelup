@@ -12,8 +12,14 @@ class camel:
         self.position = position
         self.stack_position = stack_position
         
-    def camel_type(self):
+    def camel_direction(self):
         raise NotImplementedError
+        
+    def __str__(self):
+        return f'{self.__class__.__name__} no {self.id} at {self.position}, y = {self.stack_position}'
+    
+    def __repr__(self):
+        return str(self)
         
 class racing_camel(camel):
     
