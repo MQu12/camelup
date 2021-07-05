@@ -8,7 +8,7 @@ Created on Sun Jul  4 15:55:25 2021
 from camels import racing_camel, crazy_camel
 import matplotlib.pyplot as plt
 import random
-import pandas as pd
+import numpy as np
 
 track_length = 16
 leg_length = 5
@@ -231,13 +231,54 @@ def plot_state(camel_list):
     plt.xlim(-1,track_length)
     plt.ylim(-0.5,7.5)
     plt.show()
+
+def simulate_leg(camel_list, output_all=False):
+    '''
+    Simulate a leg of the race
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        Starting positions of camels.
+    output_all : bool, optional
+        If true, a list of list of camels will be ouput
+        detailing the state of the race after each die roll.
+        The default is False.
+
+    Returns
+    -------
+    camel_list : list[camel]
+        Finishing positions of camels
+    all_states_list: list[list[camel]]
+        List of list of camel states after each die roll.
+        Only output if output_all is true.
     
-plot_state(camel_list)
+    '''
+    
+    all_states_list = None
+    if output_all:
+        all_states_list = []
+    
+    camels_to_move = [i for i in range(racing_camel_count)]
+    camels_to_move.append('crazy')
+    
+    for i in range(leg_length):
+        camel_list, camels_to_move = advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move)
+        if output_all:
+            all_states_list.append(camel_list)
+        
+    return camel_list, all_states_list
 
-camels_to_move = [i for i in range(racing_camel_count)]
-camels_to_move.append('crazy')
+def simulate_n_legs(camel_list,n):
 
-for i in range(5):
-    camel_list, camels_to_move = advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move)
-    print(get_leader(camel_list))
-    plot_state(camel_list)
+    winners = np.zeros(racing_camel_count)
+    
+    for i in range(n):
+        final_state,_ = simulate_leg(camel_list)
+        leader = get_leader(final_state)
+        winners[leader] += 1
+        
+    return final_state
+
+final_state = simulate_n_legs(camel_list,3)
+plot_state(final_state)
