@@ -313,27 +313,48 @@ def simulate_leg_n_times(camel_list,n):
         
     return winners
 
-def simulate_race(camel_list):
+def simulate_race(camel_list, output_all=False):
     
     game_end = False
-    new_state = deepcopy(camel_list)
+    final_state = deepcopy(camel_list)
+    
+    all_states_list = [camel_list]
     
     while not game_end:
-        new_state,_,game_end = simulate_leg(new_state, output_all=False)
+        final_state, leg_states, game_end = simulate_leg(final_state, output_all)
+        if output_all:
+            all_states_list += leg_states
         
-    return get_leader(new_state)
+    return final_state, all_states_list
 
 def simulate_n_races(camel_list,n):
     
     winners = np.zeros(racing_camel_count)
     
     for i in range(n):
-        winner = simulate_race(camel_list)
+        final_state,_ = simulate_race(camel_list)
+        winner = get_leader(final_state)
         winners[winner] += 1
         
     return winners
 
+'''
 n=10000
-#winners = simulate_leg_n_times(camel_list,n)
+winners = simulate_leg_n_times(camel_list,n)
+plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
+plt.title('Leg win probability')
+plt.show()
 winners = simulate_n_races(camel_list,n)
 plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
+plt.title('Race win probability')
+plt.show()
+'''
+
+#TODO add exceptions for crazy camels
+#TODO add extra file to run tests
+#TODO add running probs for an entire race
+
+final_state,all_states_list = simulate_race(camel_list,True)
+for state in all_states_list:
+    plot_state(state)
+    plt.show()
