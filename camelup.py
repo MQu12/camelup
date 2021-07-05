@@ -9,6 +9,7 @@ from camels import racing_camel, crazy_camel
 import matplotlib.pyplot as plt
 import random
 import numpy as np
+from copy import deepcopy
 
 track_length = 16
 leg_length = 5
@@ -100,8 +101,10 @@ def move_camel_to(camel_list,camel_no,final_pos):
 
     Returns
     -------
-    camel_list : list[camel]
+    final_state : list[camel]
         Updated list.
+    game_end : bool
+        True if a racing camel has crossed the finish line. False if not.
 
     '''
 
@@ -110,6 +113,10 @@ def move_camel_to(camel_list,camel_no,final_pos):
     
     camels_to_move = []
     camels_at_destination = 0
+    
+    game_end = False
+    
+    final_state = deepcopy(camel_list)
     
     for i,camel in enumerate(camel_list):
         
@@ -120,10 +127,13 @@ def move_camel_to(camel_list,camel_no,final_pos):
             camels_at_destination += 1
             
     for camel_id in camels_to_move:
-        camel_list[camel_id].position = final_pos
-        camel_list[camel_id].stack_position += (camels_at_destination - target_camel_stack_pos)
+        final_state[camel_id].position = final_pos
+        final_state[camel_id].stack_position += (camels_at_destination - target_camel_stack_pos)
     
-    return camel_list
+    if final_pos >= track_length:
+        game_end = True
+    
+    return final_state, game_end
 
 def advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move):
     '''
@@ -142,33 +152,36 @@ def advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move
 
     Returns
     -------
-    camel_list : list[camel]
+    updated_camel_list : list[camel]
         Updated list of camels.
     camels_to_move : list
         Same as input list but with moved camel removed.
-
+    game_end : bool
+        True if a racing camel has crossed the finish line. False if not.
     '''
     
     camel_no = camels_to_move[random.randint(0,len(camels_to_move)-1)]
     
     roll = random.randint(min_roll,max_roll)
     
+    game_end = False
+    
     if camel_no != 'crazy':
         # advance racing camel
         camel = camel_list[camel_no]
         final_pos = camel.position + roll
-        camel_list = move_camel_to(camel_list, camel_no, final_pos)
+        updated_camel_list,game_end = move_camel_to(camel_list, camel_no, final_pos)
         
     else:
         # advance crazy camel
         crazy_camel_no = random.randint(0,crazy_camel_count-1)
         camel = camel_list[racing_camel_count+crazy_camel_no]
         final_pos = camel.position - roll
-        camel_list = move_camel_to(camel_list, racing_camel_count+crazy_camel_no, final_pos)
+        updated_camel_list,_ = move_camel_to(camel_list, racing_camel_count+crazy_camel_no, final_pos)
     
     camels_to_move.remove(camel_no)
     
-    return camel_list, camels_to_move
+    return updated_camel_list, camels_to_move, game_end
     
 def get_leader(camel_list):
     '''
@@ -252,6 +265,8 @@ def simulate_leg(camel_list, output_all=False):
     all_states_list: list[list[camel]]
         List of list of camel states after each die roll.
         Only output if output_all is true.
+    game_end : bool
+        True if a racing camel has crossed the finish line. False if not.
     
     '''
     
@@ -263,22 +278,62 @@ def simulate_leg(camel_list, output_all=False):
     camels_to_move.append('crazy')
     
     for i in range(leg_length):
-        camel_list, camels_to_move = advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move)
+        camel_list, camels_to_move, game_end = advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move)
         if output_all:
             all_states_list.append(camel_list)
+        if game_end:
+            break
         
-    return camel_list, all_states_list
+    return camel_list, all_states_list, game_end
 
-def simulate_n_legs(camel_list,n):
+def simulate_leg_n_times(camel_list,n):
+    '''
+    Simulate a leg n times
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels.
+    n : int
+        Number of iterations.
+
+    Returns
+    -------
+    winners : array[float]
+        Wins per camel.
+
+    '''
 
     winners = np.zeros(racing_camel_count)
     
     for i in range(n):
-        final_state,_ = simulate_leg(camel_list)
+        final_state,_,_ = simulate_leg(camel_list)
         leader = get_leader(final_state)
         winners[leader] += 1
         
-    return final_state
+    return winners
 
-final_state = simulate_n_legs(camel_list,3)
-plot_state(final_state)
+def simulate_race(camel_list):
+    
+    game_end = False
+    new_state = deepcopy(camel_list)
+    
+    while not game_end:
+        new_state,_,game_end = simulate_leg(new_state, output_all=False)
+        
+    return get_leader(new_state)
+
+def simulate_n_races(camel_list,n):
+    
+    winners = np.zeros(racing_camel_count)
+    
+    for i in range(n):
+        winner = simulate_race(camel_list)
+        winners[winner] += 1
+        
+    return winners
+
+n=10000
+#winners = simulate_leg_n_times(camel_list,n)
+winners = simulate_n_races(camel_list,n)
+plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
