@@ -135,6 +135,69 @@ def move_camel_to(camel_list,camel_no,final_pos):
     
     return final_state, game_end
 
+def pick_crazy_camel(camel_list,racing_camel_count):
+    '''
+    Pick a crazy camel to move based on game rules.
+    1. If a crazy camel is directly atop another, move it
+    2. If only one crazy camel is carrying racing camels, move it
+    3. Otherwise, pick one at random
+
+    Parameters
+    ----------
+    camel_list : list[camel]
+        List of camels.
+    racing_camel_count : int
+        Number of racing camels.
+
+    Returns
+    -------
+    crazy_camel_no : int
+        ID of the crazy camel to move.
+
+    '''
+    
+    crazy_camel_no = -1
+    
+    crazy_camel_0 = camel_list[racing_camel_count]
+    crazy_camel_1 = camel_list[racing_camel_count+1]
+    
+    # check if either crazy camel is carrying any racing camels
+    crazy_camel_0_is_carrying = False
+    crazy_camel_1_is_carrying = False
+    
+    for i in range(0,racing_camel_count):
+        if not crazy_camel_0_is_carrying and crazy_camel_0.position == camel_list[i].position:
+            if camel_list[i].stack_position > crazy_camel_0.stack_position:
+                crazy_camel_0_is_carrying = True
+        if not crazy_camel_1_is_carrying and crazy_camel_1.position == camel_list[i].position:
+            if camel_list[i].stack_position > crazy_camel_1.stack_position:
+                crazy_camel_1_is_carrying = True
+        if crazy_camel_0_is_carrying and crazy_camel_1_is_carrying:
+            break
+    
+    # if one crazy camel is directly on top of another, move it
+    if crazy_camel_0.position == crazy_camel_1.position and abs(crazy_camel_0.stack_position - crazy_camel_1.stack_position) == 1:
+        if crazy_camel_0.stack_position > crazy_camel_1.stack_position:
+            crazy_camel_no = 0
+        else:
+            crazy_camel_no = 1
+    
+    # if only one crazy camel is carrying racing camels, move it
+    elif crazy_camel_0_is_carrying != crazy_camel_1_is_carrying:
+        if crazy_camel_0_is_carrying:
+            crazy_camel_no = 0
+        else:
+            crazy_camel_no = 1
+        
+    # otherwise, pick one at random
+    else:
+        crazy_camel_no = random.randint(0,crazy_camel_count-1)
+        
+    if crazy_camel_no == -1:
+        raise ValueError('Crazy camel number should not be -1')
+        
+    return crazy_camel_no
+
 def advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move):
     '''
     Advance a camel at random
@@ -174,7 +237,7 @@ def advance_camel(camel_list,racing_camel_count,crazy_camel_count,camels_to_move
         
     else:
         # advance crazy camel
-        crazy_camel_no = random.randint(0,crazy_camel_count-1)
+        crazy_camel_no = pick_crazy_camel(camel_list,racing_camel_count)
         camel = camel_list[racing_camel_count+crazy_camel_no]
         final_pos = camel.position - roll
         updated_camel_list,_ = move_camel_to(camel_list, racing_camel_count+crazy_camel_no, final_pos)
@@ -350,11 +413,13 @@ plt.title('Race win probability')
 plt.show()
 '''
 
-#TODO add exceptions for crazy camels
-#TODO add extra file to run tests
+#TODO test pick_crazy_camel function
+#TODO add extra file to run experiments
 #TODO add running probs for an entire race
 
+'''
 final_state,all_states_list = simulate_race(camel_list,True)
 for state in all_states_list:
     plot_state(state)
     plt.show()
+'''
