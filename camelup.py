@@ -25,6 +25,9 @@ class race_state:
         self.crazy_camel_count = self.get_number_of_camel_types(camel_list,crazy_camel)
         self.camel_list = camel_list
         
+        self.reset_leg()
+        
+    def reset_leg(self):
         self.camels_to_move = [i for i in range(self.racing_camel_count)]
         self.camels_to_move.append('crazy')
 
@@ -217,6 +220,18 @@ class race_state:
                 continue
             
         return leading_camel_id
+    
+    def __str__(self):
+        
+        output = ''
+        
+        for camel in self.camel_list:
+            output += camel.__str__() + '\n'
+    
+        return output[:-1]
+    
+    def __repr__(self):
+        return str(self)
 
 #TODO add extra file to run experiments
 #TODO add custom marker for plotting

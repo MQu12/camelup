@@ -38,15 +38,16 @@ def simulate_leg(prev_state, output_all=False):
     if output_all:
         all_states_list = []
     
-    camels_to_move = [i for i in range(prev_state.racing_camel_count)]
-    camels_to_move.append('crazy')
+    new_state = deepcopy(prev_state)
     
     for i in range(prev_state.leg_length):
-        new_state = advance_camel(prev_state)
+        new_state = advance_camel(new_state)
         if output_all:
             all_states_list.append(new_state)
         if new_state.game_end:
             break
+        
+    new_state.reset_leg()
         
     return new_state, all_states_list
 
