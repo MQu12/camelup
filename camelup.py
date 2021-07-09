@@ -7,11 +7,23 @@ Created on Sun Jul  4 15:55:25 2021
 
 from camels import racing_camel, crazy_camel
 import random
-from copy import deepcopy
 
 class race_state:
 
     def __init__(self, camel_list):
+        '''
+        Intialise the race state
+
+        Parameters
+        ----------
+        camel_list : list(camel)
+            Initial positions of each camel.
+
+        Returns
+        -------
+        None.
+
+        '''
         
         self.game_end = False
         
@@ -19,26 +31,30 @@ class race_state:
         self.leg_length = 5
         self.max_roll = 3
         self.min_roll = 1
-        
-        self.set_stack(camel_list)
-        self.racing_camel_count = self.get_number_of_camel_types(camel_list,racing_camel)
-        self.crazy_camel_count = self.get_number_of_camel_types(camel_list,crazy_camel)
         self.camel_list = camel_list
         
+        self.racing_camel_count = self.get_number_of_camel_types(racing_camel)
+        self.crazy_camel_count = self.get_number_of_camel_types(crazy_camel)
+        
+        self.set_stack()
         self.reset_leg()
         
     def reset_leg(self):
+        '''
+        Reset the leg by marking all camels as unmoved. Should be run after each leg is complete.
+
+        Returns
+        -------
+        None.
+
+        '''
+        
         self.camels_to_move = [i for i in range(self.racing_camel_count)]
         self.camels_to_move.append('crazy')
 
-    def set_stack(self,camel_list):
+    def set_stack(self):
         '''
-        Set the stack positions of each camel
-    
-        Parameters
-        ----------
-        camel_list : list[camel]
-            List of camels
+        Set the stack positions of each camel. Should be run on any new camel list.
     
         Returns
         -------
@@ -48,21 +64,19 @@ class race_state:
         
         positions = []
         
-        for i in range(len(camel_list)):
+        for i in range(len(self.camel_list)):
             
-            camels_on_tile = positions.count(camel_list[i].position)
-            camel_list[i].stack_position = camels_on_tile
-            positions.append(camel_list[i].position)
+            camels_on_tile = positions.count(self.camel_list[i].position)
+            self.camel_list[i].stack_position = camels_on_tile
+            positions.append(self.camel_list[i].position)
     
-    def get_number_of_camel_types(self,camel_list,camel_type):
+    def get_number_of_camel_types(self,camel_type):
         '''
         Count the amount of a type of camel
     
         Parameters
         ----------
-        camel_list : list[camel]
-            List of camels
-        camel_type : class(camel)
+        camel_type : class
             Type of camel to count
     
         Returns
@@ -74,7 +88,7 @@ class race_state:
         
         count = 0
         
-        for camel in camel_list:
+        for camel in self.camel_list:
             if type(camel) == camel_type:
                 count += 1
                 
@@ -82,15 +96,14 @@ class race_state:
     
     def move_camel_to(self,camel_no,final_pos):
         '''
-        Move camel id in list to a particular location.
+        Move camel id in race to a particular location.
         Takes into account camel positions in stack.
         Camels above target are carried and the substack is put on top of a
         stack at the destination.
+        race_state is updated to reflect the change.
     
         Parameters
         ----------
-        camel_list : list[camel]
-            List of camels.
         camel_no : int
             Camel id.
         final_pos : int
@@ -98,10 +111,7 @@ class race_state:
     
         Returns
         -------
-        final_state : list[camel]
-            Updated list.
-        game_end : bool
-            True if a racing camel has crossed the finish line. False if not.
+        None
     
         '''
     
@@ -132,13 +142,6 @@ class race_state:
         1. If a crazy camel is directly atop another, move it
         2. If only one crazy camel is carrying racing camels, move it
         3. Otherwise, pick one at random
-    
-        Parameters
-        ----------
-        camel_list : list[camel]
-            List of camels.
-        racing_camel_count : int
-            Number of racing camels.
     
         Returns
         -------
@@ -191,12 +194,8 @@ class race_state:
         
     def get_leader(self):
         '''
-        Get camel at the front
-    
-        Parameters
-        ----------
-        camel_list : list[camel]
-            List of camels.
+        Get the racing camel at the front.
+        If there is a stack leading, the camel at the top of the stack is returned.
     
         Returns
         -------
@@ -233,7 +232,6 @@ class race_state:
     def __repr__(self):
         return str(self)
 
-#TODO add extra file to run experiments
 #TODO add custom marker for plotting
 #TODO add running probs for an entire race. Make sure that the correct subset of camels are picked for each subset of a leg
 

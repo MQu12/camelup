@@ -9,30 +9,28 @@ from copy import deepcopy
 import numpy as np
 import random
 
+random.seed(1)
+
 def simulate_leg(prev_state, output_all=False):
     '''
-    Simulate a leg of the race
+    Simulate a leg of the race.
 
     Parameters
     ----------
-    camel_list : list[camel]
-        Starting positions of camels.
+    prev_state : race_state
+        Previous race state.
     output_all : bool, optional
-        If true, a list of list of camels will be ouput
-        detailing the state of the race after each die roll.
-        The default is False.
+        Output all intermediate states. The default is False.
 
     Returns
     -------
-    camel_list : list[camel]
-        Finishing positions of camels
-    all_states_list: list[list[camel]]
-        List of list of camel states after each die roll.
-        Only output if output_all is true.
-    game_end : bool
-        True if a racing camel has crossed the finish line. False if not.
-    
+    new_state : race_state
+        New state of the race.
+    all_states_list : list(race_state)
+        List of all intermediate race states. Only output if output_all is true.
+
     '''
+    
     
     all_states_list = None
     if output_all:
@@ -57,8 +55,8 @@ def simulate_leg_n_times(state,n):
 
     Parameters
     ----------
-    camel_list : list[camel]
-        List of camels.
+    state : race_state
+        State of the race.
     n : int
         Number of iterations.
 
@@ -79,6 +77,24 @@ def simulate_leg_n_times(state,n):
     return winners
 
 def simulate_race(state, output_all=False):
+    '''
+    Simulate an entire race once.
+
+    Parameters
+    ----------
+    state : race_state
+        Initial state of the race.
+    output_all : bool, optional
+        Output intermediate states. The default is False.
+
+    Returns
+    -------
+    final_state : race_state
+        Final state of the race after the first camel has crossed the line.
+    all_states_list : list(race_state)
+        List of all intermediate race states. Only output if output_all is true..
+
+    '''
     
     final_state = deepcopy(state)
     
@@ -92,6 +108,22 @@ def simulate_race(state, output_all=False):
     return final_state, all_states_list
 
 def simulate_n_races(state,n):
+    '''
+    Simulate a race n times from a starting state.
+
+    Parameters
+    ----------
+    state : race_state
+        Initial state of the race.
+    n : int
+        Number of iterations to perform.
+
+    Returns
+    -------
+    winners : array(float)
+        Array of wins per camel.
+
+    '''
     
     winners = np.zeros(state.racing_camel_count)
     
@@ -108,23 +140,13 @@ def advance_camel(state):
 
     Parameters
     ----------
-    camel_list : list[camel]
-        List of camels.
-    racing_camel_count : int
-        Number of racing camels.
-    crazy_camel_count : int
-        Number of crazy camels.
-    camels_to_move : list
-        List of camels yet to move.
+    state : race_state
+        State of the race.
 
     Returns
     -------
-    updated_camel_list : list[camel]
-        Updated list of camels.
-    camels_to_move : list
-        Same as input list but with moved camel removed.
-    game_end : bool
-        True if a racing camel has crossed the finish line. False if not.
+    new_state : race_state
+        State of the race after camel has moved.
     '''
     
     new_race_state = deepcopy(state)
