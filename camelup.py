@@ -11,6 +11,8 @@ import random
 import numpy as np
 from copy import deepcopy
 
+random.seed(1)
+
 track_length = 16
 leg_length = 5
 max_roll = 3
@@ -401,7 +403,7 @@ def simulate_n_races(camel_list,n):
         
     return winners
 
-'''
+
 n=10000
 winners = simulate_leg_n_times(camel_list,n)
 plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
@@ -411,7 +413,7 @@ winners = simulate_n_races(camel_list,n)
 plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
 plt.title('Race win probability')
 plt.show()
-'''
+
 
 #TODO add extra file to run experiments
 #TODO add custom marker for plotting
