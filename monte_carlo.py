@@ -84,7 +84,7 @@ def simulate_race(state, output_all=False):
     
     all_states_list = [state]
     
-    while not state.game_end:
+    while not final_state.game_end:
         final_state, leg_states = simulate_leg(final_state, output_all)
         if output_all:
             all_states_list += leg_states

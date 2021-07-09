@@ -25,11 +25,12 @@ camel_list.append( crazy_camel(1,14) )
 
 state = race_state(camel_list)
 
-n=100
+n=10000
 winners = monte_carlo.simulate_leg_n_times(state,n)
 plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
 plt.title('Leg win probability')
 plt.show()
+
 winners = monte_carlo.simulate_n_races(state,n)
 plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
 plt.title('Race win probability')
