@@ -9,8 +9,6 @@ from copy import deepcopy
 import numpy as np
 import random
 
-random.seed(1)
-
 def simulate_leg(prev_state, output_all=False):
     '''
     Simulate a leg of the race.
@@ -38,7 +36,7 @@ def simulate_leg(prev_state, output_all=False):
     
     new_state = deepcopy(prev_state)
     
-    for i in range(prev_state.leg_length):
+    for i in range(len(new_state.camels_to_move)):
         new_state = advance_camel(new_state)
         if output_all:
             all_states_list.append(new_state)
@@ -150,7 +148,6 @@ def advance_camel(state):
     '''
     
     new_race_state = deepcopy(state)
-    
     camel_no = new_race_state.camels_to_move[random.randint(0,len(new_race_state.camels_to_move)-1)]
     
     roll = random.randint(new_race_state.min_roll,new_race_state.max_roll)

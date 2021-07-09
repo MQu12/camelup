@@ -234,10 +234,3 @@ class race_state:
 
 #TODO add custom marker for plotting
 #TODO add running probs for an entire race. Make sure that the correct subset of camels are picked for each subset of a leg
-
-'''
-final_state,all_states_list = simulate_race(camel_list,True)
-for state in all_states_list:
-    plot_state(state)
-    plt.show()
-'''
