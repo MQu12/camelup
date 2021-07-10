@@ -9,6 +9,7 @@ from camels import racing_camel,crazy_camel
 from matplotlib import pyplot as plt
 from camelup import race_state
 import constants
+import numpy as np
 
 racing_colours = ['red','green','orange','blue','purple']
 crazy_colours = ['black','white']
@@ -30,19 +31,22 @@ def plot_state(state):
     
     camel_size = 2900
     
-    plt.figure()
+    fig1 = plt.figure(facecolor='white')
+    ax1 = plt.axes()
+    ax1.axes.get_yaxis().set_visible(False)
     
     for camel in state.camel_list:
         
         if type(camel) == racing_camel:
             col = racing_colours[camel.id]
-            plt.scatter(camel.position,camel.stack_position,color=col,s=camel_size,marker=constants.racingCamelMarker)
+            plt.scatter(camel.position+0.2,camel.stack_position,color=col,s=camel_size,marker=constants.racingCamelMarker)
             
         else:
             col = crazy_colours[camel.id]
-            plt.scatter(camel.position,camel.stack_position,color=col,s=camel_size,edgecolors='black',marker=constants.crazyCamelMarker)
+            plt.scatter(camel.position-0.3,camel.stack_position,color=col,s=camel_size,edgecolors='black',marker=constants.crazyCamelMarker)
             
     plt.xlim(-1,state.track_length)
+    plt.xticks(np.arange(0, state.track_length+1, 1.0))
     plt.ylim(-0.5,7.5)
     plt.show()
     

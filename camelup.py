@@ -232,5 +232,4 @@ class race_state:
     def __repr__(self):
         return str(self)
 
-#TODO add custom marker for plotting
 #TODO add running probs for an entire race
