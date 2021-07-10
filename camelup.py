@@ -10,14 +10,16 @@ import random
 
 class race_state:
 
-    def __init__(self, camel_list):
+    def __init__(self, camel_list=None):
         '''
         Intialise the race state
 
         Parameters
         ----------
-        camel_list : list(camel)
+        camel_list : list(camel), optional
             Initial positions of each camel.
+            If not provided, initial camel positions are randomised.
+            The default is None.
 
         Returns
         -------
@@ -31,7 +33,18 @@ class race_state:
         self.leg_length = 5
         self.max_roll = 3
         self.min_roll = 1
-        self.camel_list = camel_list
+        
+        if camel_list:
+            self.camel_list = camel_list
+        else:
+            self.camel_list = []    
+            self.camel_list.append( racing_camel(0,random.randint(1,3)) )
+            self.camel_list.append( racing_camel(1,random.randint(1,3)) )
+            self.camel_list.append( racing_camel(2,random.randint(1,3)) )
+            self.camel_list.append( racing_camel(3,random.randint(1,3)) )
+            self.camel_list.append( racing_camel(4,random.randint(1,3)) )
+            self.camel_list.append( crazy_camel(0,random.randint(13,15)) )
+            self.camel_list.append( crazy_camel(1,random.randint(13,15)) )
         
         self.leg_num = 0
         self.num_moves = 0

@@ -21,9 +21,9 @@ camel_list.append( racing_camel(4,2) )
 camel_list.append( crazy_camel(0,15) )
 camel_list.append( crazy_camel(1,14) )
 
-state = race_state(camel_list)
+state = race_state()
 
-random.seed(1)
+random.seed(3)
 
 race_winners_list = []
 
