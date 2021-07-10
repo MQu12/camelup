@@ -232,5 +232,6 @@ class race_state:
     def __repr__(self):
         return str(self)
 
+#TODO merge branches
 #TODO add custom marker for plotting
-#TODO add running probs for an entire race. Make sure that the correct subset of camels are picked for each subset of a leg
+#TODO add running probs for an entire race
