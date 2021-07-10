@@ -36,7 +36,7 @@ def simulate_leg(prev_state, output_all=False):
     
     new_state = deepcopy(prev_state)
     
-    for i in range(len(new_state.camels_to_move)):
+    for i in range(len(new_state.camels_to_move)-1):
         new_state = advance_camel(new_state)
         if output_all:
             all_states_list.append(new_state)

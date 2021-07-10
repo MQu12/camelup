@@ -33,6 +33,9 @@ class race_state:
         self.min_roll = 1
         self.camel_list = camel_list
         
+        self.leg_num = 0
+        self.num_moves = 0
+        
         self.racing_camel_count = self.get_number_of_camel_types(racing_camel)
         self.crazy_camel_count = self.get_number_of_camel_types(crazy_camel)
         
@@ -51,6 +54,7 @@ class race_state:
         
         self.camels_to_move = [i for i in range(self.racing_camel_count)]
         self.camels_to_move.append('crazy')
+        self.leg_num += 1
 
     def set_stack(self):
         '''
@@ -135,6 +139,8 @@ class race_state:
         
         if final_pos >= self.track_length:
             self.game_end = True
+    
+        self.num_moves += 1
     
     def pick_crazy_camel(self):
         '''
@@ -222,12 +228,12 @@ class race_state:
     
     def __str__(self):
         
-        output = ''
+        output = f'State after {self.num_moves} moves\nLeg {self.leg_num}'
         
         for camel in self.camel_list:
-            output += camel.__str__() + '\n'
+            output += ('\n'+camel.__str__())
     
-        return output[:-1]
+        return output
     
     def __repr__(self):
         return str(self)
