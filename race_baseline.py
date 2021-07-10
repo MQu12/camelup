@@ -9,7 +9,6 @@ from camelup import race_state
 from camels import racing_camel, crazy_camel
 import monte_carlo
 import make_plots
-from matplotlib import pyplot as plt
 import random
 
 camel_list = []
@@ -30,11 +29,12 @@ race_winners_list = []
 
 final_state,all_states_list = monte_carlo.simulate_race(state,True)
 for state in all_states_list:
-    make_plots.plot_state(state)
-    plt.show()
     
-    winners = monte_carlo.simulate_n_races(state,1000)
+    leg_winners = monte_carlo.simulate_leg_n_times(state, 1000)
+    race_winners = monte_carlo.simulate_n_races(state,1000)
     
-    race_winners_list.append(winners)
+    make_plots.plot_state(state,leg_winners/leg_winners.sum(),race_winners/race_winners.sum())
+    
+    race_winners_list.append(race_winners)
     
 make_plots.plot_area(race_winners_list)

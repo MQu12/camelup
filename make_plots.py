@@ -15,7 +15,7 @@ import pandas as pd
 racing_colours = ['red','green','orange','blue','purple']
 crazy_colours = ['black','white']
 
-def plot_state(state):
+def plot_state(state,leg_win_probs=None,race_win_probs=None):
     '''
     Plot the positions of each camel
 
@@ -75,7 +75,23 @@ def plot_state(state):
     
     axis_moved_camels.set_ylim(-0.15,1)
     
-    #axis_leg_probs = fig1.add_axes([0.22,0.5,0.1,0.3])
+    if type(leg_win_probs) == np.ndarray:
+        axis_leg_probs = fig1.add_axes([0.22,0.51,0.1,0.23])
+        axis_leg_probs.text(0,4.8,'Win leg')
+        axis_leg_probs.axis('off')
+        axis_leg_probs.barh(np.arange(state.racing_camel_count),leg_win_probs,align='center',color=racing_colours+['black'])
+        axis_leg_probs.set_xlim(0,1)
+        for i,value in enumerate(leg_win_probs):
+            axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
+    
+    if type(race_win_probs) == np.ndarray:
+        axis_race_probs = fig1.add_axes([0.35,0.51,0.1,0.23])
+        axis_race_probs.text(0,4.8,'Win race')
+        axis_race_probs.axis('off')
+        axis_race_probs.barh(np.arange(state.racing_camel_count),race_win_probs,align='center',color=racing_colours+['black'])
+        axis_race_probs.set_xlim(0,1)
+        for i,value in enumerate(race_win_probs):
+            axis_race_probs.text(0.5,i-0.3,f'{round(value,2)}')
     
     plt.show()
     
