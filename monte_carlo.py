@@ -125,13 +125,16 @@ def simulate_n_races(state,n):
     '''
     
     winners = np.zeros(state.racing_camel_count)
+    losers = np.zeros(state.racing_camel_count)
     
     for i in range(n):
         final_state,_ = simulate_race(state)
         winner = final_state.get_leader()
+        loser = final_state.get_last_place()
         winners[winner] += 1
+        losers[loser] += 1
         
-    return winners
+    return winners, losers
 
 def advance_camel(state):
     '''

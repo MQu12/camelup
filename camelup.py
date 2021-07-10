@@ -239,6 +239,22 @@ class race_state:
             
         return leading_camel_id
     
+    def get_last_place(self):
+        
+        furthest_back = 16
+        trailing_camel_id = 0
+        
+        for camel in self.camel_list:
+            if type(camel) == crazy_camel:
+                continue
+            if camel.position < furthest_back and camel.stack_position == 0:
+                furthest_back = camel.position
+                trailing_camel_id = camel.id
+            else:
+                continue
+            
+        return trailing_camel_id
+    
     def __str__(self):
         
         output = f'State after {self.num_moves} moves\nLeg {self.leg_num}'
