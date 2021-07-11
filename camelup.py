@@ -8,12 +8,15 @@ Created on Sun Jul  4 15:55:25 2021
 from camels import racing_camel, crazy_camel
 import random
 import constants
+import numpy as np
 
 random.seed(constants.RANDOM_SEED)
 
 class race_state:
 
-    def __init__(self, camel_list=None):
+    def __init__(self, camel_list=None,
+                 n_racing_camels=5, n_crazy_camels=2,
+                 track_length=16, leg_length=5, min_roll=1, max_roll=3):
         '''
         Intialise the race state
 
@@ -23,6 +26,21 @@ class race_state:
             Initial positions of each camel.
             If not provided, initial camel positions are randomised.
             The default is None.
+        n_racing_camels : int, optional
+            Number of racing camels. Only specify if not providig a list of camels.
+            The default is 5.
+        n_crazy_camels : int, optional
+            Number of crazy camels. Only specify if not providig a list of camels.
+            The default is 2.
+        track_length : int, optional
+            Length of race track. The default is 16.
+        leg_length : int, optional
+            Number of dice rolls/leg. Max value = number of racing camels + 1
+            The default is 5.
+        min_roll : int, optional
+            Min dice roll value. The default is 1.
+        max_roll : int, optional
+            Max dice roll value. The default is 3.
 
         Returns
         -------
@@ -32,29 +50,28 @@ class race_state:
         
         self.game_end = False
         
-        self.track_length = 16
-        self.leg_length = 5
-        self.max_roll = 3
-        self.min_roll = 1
+        self.track_length = track_length
+        self.leg_length = leg_length
+        self.max_roll = max_roll
+        self.min_roll = min_roll
         
         if camel_list:
             self.camel_list = camel_list
+            self.racing_camel_count = self.get_number_of_camel_types(racing_camel)
+            self.crazy_camel_count = self.get_number_of_camel_types(crazy_camel)
         else:
-            self.camel_list = []    
-            self.camel_list.append( racing_camel(0,random.randint(1,3)) )
-            self.camel_list.append( racing_camel(1,random.randint(1,3)) )
-            self.camel_list.append( racing_camel(2,random.randint(1,3)) )
-            self.camel_list.append( racing_camel(3,random.randint(1,3)) )
-            self.camel_list.append( racing_camel(4,random.randint(1,3)) )
-            self.camel_list.append( crazy_camel(0,random.randint(13,15)) )
-            self.camel_list.append( crazy_camel(1,random.randint(13,15)) )
+            self.camel_list = []
+            self.racing_camel_count = n_racing_camels
+            self.crazy_camel_count = n_crazy_camels
+            for i in range(n_racing_camels):
+                self.camel_list.append( racing_camel(i,random.randint(min_roll,max_roll)))
+
+            for i in range(n_crazy_camels):
+                self.camel_list.append( crazy_camel(i,random.randint(track_length-max_roll,track_length-min_roll)) )
         
         self.leg_num = 0
         self.num_moves = 0
-        
-        self.racing_camel_count = self.get_number_of_camel_types(racing_camel)
-        self.crazy_camel_count = self.get_number_of_camel_types(crazy_camel)
-        
+
         self.set_stack()
         self.reset_leg()
         
@@ -172,47 +189,47 @@ class race_state:
     
         '''
         
-        crazy_camel_no = -1
-        
-        crazy_camel_0 = self.camel_list[self.racing_camel_count]
-        crazy_camel_1 = self.camel_list[self.racing_camel_count+1]
+        crazy_camel_list = [camel for camel in self.camel_list[self.racing_camel_count:]]
         
         # check if either crazy camel is carrying any racing camels
-        crazy_camel_0_is_carrying = False
-        crazy_camel_1_is_carrying = False
+        crazy_camels_carrying = np.zeros(len(crazy_camel_list), dtype=bool)
         
         for i in range(0,self.racing_camel_count):
-            if not crazy_camel_0_is_carrying and crazy_camel_0.position == self.camel_list[i].position:
-                if self.camel_list[i].stack_position > crazy_camel_0.stack_position:
-                    crazy_camel_0_is_carrying = True
-            if not crazy_camel_1_is_carrying and crazy_camel_1.position == self.camel_list[i].position:
-                if self.camel_list[i].stack_position > crazy_camel_1.stack_position:
-                    crazy_camel_1_is_carrying = True
-            if crazy_camel_0_is_carrying and crazy_camel_1_is_carrying:
-                break
+            #camels not in a stack cannpt be being carried
+            if self.camel_list[i].stack_position == 0:
+                continue
+            for j, crazy_camel_j in enumerate(crazy_camel_list):
+                if crazy_camels_carrying[j]:
+                    continue
+                if crazy_camel.position == self.camel_list[i].position and crazy_camel_j.stack_position < self.camel_list[i].position:
+                    crazy_camels_carrying[j] = True
         
-        # if one crazy camel is directly on top of another, move it
-        if crazy_camel_0.position == crazy_camel_1.position and abs(crazy_camel_0.stack_position - crazy_camel_1.stack_position) == 1:
-            if crazy_camel_0.stack_position > crazy_camel_1.stack_position:
-                crazy_camel_no = 0
-            else:
-                crazy_camel_no = 1
+        #if only one is carrying, return it
+        if crazy_camels_carrying.sum() == 1:
+            return np.where(crazy_camels_carrying==True)[0][0]
         
-        # if only one crazy camel is carrying racing camels, move it
-        elif crazy_camel_0_is_carrying != crazy_camel_1_is_carrying:
-            if crazy_camel_0_is_carrying:
-                crazy_camel_no = 0
-            else:
-                crazy_camel_no = 1
-            
+        #if others exist, pick one at random
+        elif crazy_camels_carrying.sum() > 1:
+            return np.random.choice(
+                np.where(crazy_camels_carrying==True)[0]
+                )
+        
+        # determine which (if any) crazy camels are directly on top of another
+        crazy_id_carried_by_crazy = []
+        for crazy1 in crazy_camel_list:
+            for crazy2 in crazy_camel_list:
+                if crazy1.position == crazy2.position and crazy1.stack_position == crazy2.stack_position + 1:
+                    crazy_id_carried_by_crazy.append(crazy1.id)
+        
+        # if only one crazy camel sits directly atop another, return it
+        if len(crazy_id_carried_by_crazy) == 1:
+            return crazy_id_carried_by_crazy[0]
+        # if more than once, pick one at random
+        elif len(crazy_id_carried_by_crazy) > 1:
+           return np.random.choice(crazy_id_carried_by_crazy)
+       
         # otherwise, pick one at random
-        else:
-            crazy_camel_no = random.randint(0,self.crazy_camel_count-1)
-            
-        if crazy_camel_no == -1:
-            raise ValueError('Crazy camel number should not be -1')
-            
-        return crazy_camel_no
+        return random.randint(0,self.crazy_camel_count-1)
         
     def get_leader(self):
         '''

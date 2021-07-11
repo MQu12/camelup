@@ -12,9 +12,6 @@ import constants
 import numpy as np
 import pandas as pd
 
-racing_colours = ['red','green','orange','blue','purple']
-crazy_colours = ['black','white']
-
 def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=None):
     '''
     Plot the positions of each camel
@@ -41,11 +38,11 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
     for camel in state.camel_list:
         
         if type(camel) == racing_camel:
-            col = racing_colours[camel.id]
+            col = constants.RACING_COLOURS[camel.id]
             axis_main.scatter(camel.position+0.2,camel.stack_position,color=col,s=camel_size,marker=constants.racingCamelMarker)
             
         else:
-            col = crazy_colours[camel.id]
+            col = constants.CRAZY_COLOURS[camel.id]
             axis_main.scatter(camel.position-0.3,camel.stack_position,color=col,s=camel_size,edgecolors='black',marker=constants.crazyCamelMarker)
             
     axis_main.set_xlim(-1,state.track_length)
@@ -61,7 +58,7 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
     
     axis_moved_camels.scatter(camel_display[0],
                 camel_display[1],
-                s=300,color=racing_colours+['black'],marker=constants.racingCamelMarker)
+                s=300,color=constants.RACING_COLOURS+['black'],marker=constants.racingCamelMarker)
     
     for unmoved_camel in state.camels_to_move:
         if unmoved_camel == 'crazy':
@@ -90,7 +87,7 @@ def event_probability_sublpot(fig, shape, text, values, state):
     axis_leg_probs = fig.add_axes(shape)
     axis_leg_probs.text(0,4.8, text)
     axis_leg_probs.axis('off')
-    axis_leg_probs.barh(np.arange(state.racing_camel_count), values, align='center', color=racing_colours+['black'])
+    axis_leg_probs.barh(np.arange(state.racing_camel_count), values, align='center', color=constants.RACING_COLOURS+['black'])
     axis_leg_probs.set_xlim(0,1)
     for i,value in enumerate(values):
         axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
@@ -112,14 +109,14 @@ def plot_win_probs(winners,title):
 
     '''
     
-    plt.pie(winners,colors=racing_colours,autopct='%1.f%%')
+    plt.pie(winners,colors=constants.RACING_COLOURS,autopct='%1.f%%')
     plt.title(title)
     plt.show()
     
 def plot_area(race_winners_list):
     
     winners_df = pd.DataFrame(race_winners_list)
-    winners_df.plot.area(color=racing_colours)
+    winners_df.plot.area(color=constants.RACING_COLOURS)
     
 def main():
     camel_list = []
