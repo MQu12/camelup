@@ -7,6 +7,9 @@ Created on Sun Jul  4 15:55:25 2021
 
 from camels import racing_camel, crazy_camel
 import random
+import constants
+
+random.seed(constants.RANDOM_SEED)
 
 class race_state:
 

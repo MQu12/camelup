@@ -31,3 +31,5 @@ crazyCamelMarker = parse_path("""M1500 1735 c-105 -30 -181 -95 -265 -230 -111 -1
 -89 -95 -114 -162 -114 -84 0 -123 33 -228 190 -34 52 -82 116 -106 141 -76
 81 -194 114 -303 84z""")
 crazyCamelMarker.vertices -= crazyCamelMarker.vertices.mean(axis=0)
+
+RANDOM_SEED = 1

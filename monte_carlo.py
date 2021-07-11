@@ -8,6 +8,12 @@ Created on Thu Jul  8 18:06:32 2021
 from copy import deepcopy
 import numpy as np
 import random
+import constants
+
+def reseed():
+    random.seed(constants.RANDOM_SEED)
+
+reseed()
 
 def simulate_leg(prev_state, output_all=False):
     '''
@@ -28,7 +34,6 @@ def simulate_leg(prev_state, output_all=False):
         List of all intermediate race states. Only output if output_all is true.
 
     '''
-    
     
     all_states_list = None
     if output_all:

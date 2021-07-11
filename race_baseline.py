@@ -8,11 +8,11 @@ Created on Fri Jul  9 22:00:22 2021
 from camelup import race_state
 import monte_carlo
 import make_plots
-import random
+import constants
+
+constants.RANDOM_SEED = 420
 
 state = race_state()
-
-random.seed(420)
 
 race_winners_list = []
 race_losers_list = []

@@ -13,7 +13,6 @@ import monte_carlo
 import make_plots
 import os.path
 import numpy as np
-import random
 
 n=1000
 
@@ -33,15 +32,15 @@ def init_race():
     return state
 
 def run_leg_baseline(state,plot=False):
-    random.seed(1)
+    monte_carlo.reseed()
     leg_winners = monte_carlo.simulate_leg_n_times(state,n)
     if plot:
         make_plots.plot_win_probs(leg_winners,'Leg win probability')
     return leg_winners
 
 def run_race_baseline(state,plot=False):
-    random.seed(1)
-    race_winners = monte_carlo.simulate_n_races(state,n)
+    monte_carlo.reseed()
+    race_winners,race_losers = monte_carlo.simulate_n_races(state,n)
     if plot:
         make_plots.plot_win_probs(race_winners,'Race win probability')
     return race_winners
@@ -72,9 +71,7 @@ def create_baselines():
     
 
 def main():
-    state = init_race()
-    run_leg_baseline(state,True)
-    run_race_baseline(state,True)
+    create_baselines()
     
 if __name__ == "__main__":
     main()

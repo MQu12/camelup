@@ -5,11 +5,12 @@ Created on Fri Jul  9 21:41:58 2021
 @author: Dr. P
 """
 
+import constants
+
+constants.RANDOM_SEED = 1
+
 import numpy as np
 import simulation_baseline
-import random
-
-random.seed(1)
 
 folder = 'baselines/'
 
@@ -35,7 +36,7 @@ def test_vs_race_baseline():
         
     state = simulation_baseline.init_race()
     
-    result = simulation_baseline.run_race_baseline(state)
+    winners = simulation_baseline.run_race_baseline(state)
 
-    np.testing.assert_array_equal(baseline,result)
+    np.testing.assert_array_equal(baseline,winners)
     
