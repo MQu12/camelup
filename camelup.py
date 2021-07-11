@@ -240,6 +240,16 @@ class race_state:
         return leading_camel_id
     
     def get_last_place(self):
+        '''
+        Get the racing camel in last place.
+        If a stack is furthest back, the camel at the bottom is chosen.
+
+        Returns
+        -------
+        trailing_camel_id : int
+            ID of the trailing camel.
+
+        '''
         
         furthest_back = 16
         trailing_camel_id = 0

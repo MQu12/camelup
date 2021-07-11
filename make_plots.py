@@ -76,33 +76,24 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
     axis_moved_camels.set_ylim(-0.15,1)
     
     if type(leg_win_probs) == np.ndarray:
-        axis_leg_probs = fig1.add_axes([0.22,0.51,0.1,0.23])
-        axis_leg_probs.text(0,4.8,'Win leg')
-        axis_leg_probs.axis('off')
-        axis_leg_probs.barh(np.arange(state.racing_camel_count),leg_win_probs,align='center',color=racing_colours+['black'])
-        axis_leg_probs.set_xlim(0,1)
-        for i,value in enumerate(leg_win_probs):
-            axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
+        event_probability_sublpot(fig1, [0.22,0.51,0.1,0.23], 'Win leg', leg_win_probs, state)
     
     if type(race_win_probs) == np.ndarray:
-        axis_race_probs = fig1.add_axes([0.35,0.51,0.1,0.23])
-        axis_race_probs.text(0,4.8,'Win race')
-        axis_race_probs.axis('off')
-        axis_race_probs.barh(np.arange(state.racing_camel_count),race_win_probs,align='center',color=racing_colours+['black'])
-        axis_race_probs.set_xlim(0,1)
-        for i,value in enumerate(race_win_probs):
-            axis_race_probs.text(0.5,i-0.3,f'{round(value,2)}')
+        event_probability_sublpot(fig1, [0.35,0.51,0.1,0.23], 'Win race', race_win_probs, state)
             
     if type(race_lose_probs) == np.ndarray:
-        axis_lose_probs = fig1.add_axes([0.48,0.51,0.1,0.23])
-        axis_lose_probs.text(0,4.8,'Lose race')
-        axis_lose_probs.axis('off')
-        axis_lose_probs.barh(np.arange(state.racing_camel_count),race_lose_probs,align='center',color=racing_colours+['black'])
-        axis_lose_probs.set_xlim(0,1)
-        for i,value in enumerate(race_lose_probs):
-            axis_lose_probs.text(0.5,i-0.3,f'{round(value,2)}')
+        event_probability_sublpot(fig1, [0.48,0.51,0.1,0.23], 'Lose race', race_lose_probs, state)
     
     plt.show()
+    
+def event_probability_sublpot(fig, shape, text, values, state):
+    axis_leg_probs = fig.add_axes(shape)
+    axis_leg_probs.text(0,4.8, text)
+    axis_leg_probs.axis('off')
+    axis_leg_probs.barh(np.arange(state.racing_camel_count), values, align='center', color=racing_colours+['black'])
+    axis_leg_probs.set_xlim(0,1)
+    for i,value in enumerate(values):
+        axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
     
 def plot_win_probs(winners,title):
     '''
