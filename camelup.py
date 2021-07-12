@@ -11,6 +11,7 @@ import constants
 import numpy as np
 
 random.seed(constants.RANDOM_SEED)
+np.random.seed(constants.RANDOM_SEED)
 
 class race_state:
 
@@ -201,7 +202,7 @@ class race_state:
             for j, crazy_camel_j in enumerate(crazy_camel_list):
                 if crazy_camels_carrying[j]:
                     continue
-                if crazy_camel.position == self.camel_list[i].position and crazy_camel_j.stack_position < self.camel_list[i].position:
+                if crazy_camel_j.position == self.camel_list[i].position and crazy_camel_j.stack_position + 1 == self.camel_list[i].stack_position:
                     crazy_camels_carrying[j] = True
         
         #if only one is carrying, return it
