@@ -12,7 +12,7 @@ import constants
 import numpy as np
 import pandas as pd
 
-def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=None):
+def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=None, **kwargs):
     '''
     Plot the positions of each camel
 
@@ -28,6 +28,16 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
     '''
     
     camel_size = 2900
+    if 'camel_size' in kwargs:
+        camel_size = kwargs['camel_size']
+        
+    tick_spacing = 1.0
+    if 'tick_spacing' in kwargs:
+        tick_spacing = kwargs['tick_spacing']
+        
+    ymax = 7.5
+    if 'ymax' in kwargs:
+        ymax = kwargs['ymax']
     
     fig1 = plt.figure(facecolor='white')
     axis_main = plt.axes()
@@ -46,31 +56,32 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
             axis_main.scatter(camel.position-0.3,camel.stack_position,color=col,s=camel_size,edgecolors='black',marker=constants.crazyCamelMarker)
             
     axis_main.set_xlim(-1,state.track_length)
-    axis_main.set_xticks(np.arange(0, state.track_length+1, 1.0))
-    axis_main.set_ylim(-0.5,7.5)
+    axis_main.set_xticks(np.arange(0, state.track_length+1, tick_spacing))
+    axis_main.set_ylim(-0.5,ymax)
     
-    axis_moved_camels = fig1.add_axes([0.12,0.5,0.1,0.3])
-    axis_moved_camels.axis('off')
-    
-    xpos = np.zeros(state.racing_camel_count+1)
-    ypos = np.arange(0,state.racing_camel_count+1)/(state.racing_camel_count+1)
-    camel_display = pd.DataFrame([xpos,ypos]).T
-    
-    axis_moved_camels.scatter(camel_display[0],
-                camel_display[1],
-                s=300,color=constants.RACING_COLOURS+['black'],marker=constants.racingCamelMarker)
-    
-    for unmoved_camel in state.camels_to_move:
-        if unmoved_camel == 'crazy':
-            camel_display.drop(state.racing_camel_count,inplace=True)
-        else:
-            camel_display.drop(unmoved_camel,inplace=True)
-    
-    axis_moved_camels.scatter(camel_display[0],
-                camel_display[1],
-                s=150,linewidth=1,color='black',marker='X',edgecolor='white')
-    
-    axis_moved_camels.set_ylim(-0.15,1)
+    if state.racing_camel_count + state.crazy_camel_count < 8:
+        axis_moved_camels = fig1.add_axes([0.12,0.5,0.1,0.3])
+        axis_moved_camels.axis('off')
+        
+        xpos = np.zeros(state.racing_camel_count+1)
+        ypos = np.arange(0,state.racing_camel_count+1)/(state.racing_camel_count+1)
+        camel_display = pd.DataFrame([xpos,ypos]).T
+        
+        axis_moved_camels.scatter(camel_display[0],
+                    camel_display[1],
+                    s=300,color=constants.RACING_COLOURS[:state.racing_camel_count]+['black'],marker=constants.racingCamelMarker)
+        
+        for unmoved_camel in state.camels_to_move:
+            if unmoved_camel == 'crazy':
+                camel_display.drop(state.racing_camel_count,inplace=True)
+            else:
+                camel_display.drop(unmoved_camel,inplace=True)
+        
+        axis_moved_camels.scatter(camel_display[0],
+                    camel_display[1],
+                    s=150,linewidth=1,color='black',marker='X',edgecolor='white')
+        
+        axis_moved_camels.set_ylim(-0.15,1)
     
     if type(leg_win_probs) == np.ndarray:
         event_probability_sublpot(fig1, [0.22,0.51,0.1,0.23], 'Win leg', leg_win_probs, state)
@@ -116,7 +127,8 @@ def plot_win_probs(winners,title):
 def plot_area(race_winners_list):
     
     winners_df = pd.DataFrame(race_winners_list)
-    winners_df.plot.area(color=constants.RACING_COLOURS)
+    fig, ax = plt.subplots()
+    ax.stackplot(winners_df.index, winners_df.values.T,colors=constants.RACING_COLOURS)
     
 def main():
     camel_list = []

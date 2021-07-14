@@ -34,5 +34,25 @@ crazyCamelMarker.vertices -= crazyCamelMarker.vertices.mean(axis=0)
 
 RANDOM_SEED = 1
 
-RACING_COLOURS = ['red','green','orange','blue','purple']
-CRAZY_COLOURS = ['black','white']
+RACING_COLOURS = ['red',
+                  'green',
+                  'orange',
+                  'blue',
+                  'purple',
+                  'brown',
+                  'pink',
+                  'olive',
+                  'cyan',
+                  'maroon',
+                  'darkblue',
+                  'lawngreen',
+                  'dodgerblue',
+                  'crimson',
+                  'turquoise',
+                  'yellow',
+                  'beige',
+                  'sandybrown',
+                  'lime',
+                  'darkgreen'
+                  ]
+CRAZY_COLOURS = ['black','white','gray','darkgray','lightgray']
