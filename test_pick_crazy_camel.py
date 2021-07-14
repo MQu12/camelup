@@ -23,7 +23,7 @@ def test_random_camel_is_picked_when_crazy_camels_are_apart(mocker):
 
     state.pick_crazy_camel()
     
-    random.randint.assert_called_once()
+    random.randint.assert_called_once_with(0,1)
     np.random.choice.assert_not_called()
 
 def test_top_camel_is_picked_when_crazy_camels_are_stacked(mocker):
@@ -65,10 +65,10 @@ def test_camel_carrying_racing_camels_is_picked(mocker):
     
     assert crazy_camel_no == 1
     
-def test_camel_picked_at_random_when_both_are_carrying_crazy_camels(mocker):
+def test_camel_picked_at_random_when_both_crazy_camels_are_carrying(mocker):
     
     mocker.patch('random.randint')
-    mocker.patch('numpy.random.choice')
+    npmocker = mocker.patch('numpy.random.choice')
     
     camel_list = []
     camel_list.append( racing_camel(0,5) )
@@ -77,11 +77,16 @@ def test_camel_picked_at_random_when_both_are_carrying_crazy_camels(mocker):
     camel_list.append( crazy_camel(1,5) )
 
     state = race_state(camel_list)
+    state.camel_list[0].stack_position = 1
+    state.camel_list[2].stack_position = 0
+    state.camel_list[1].stack_position = 1
+    state.camel_list[3].stack_position = 0
 
     state.pick_crazy_camel()
     
-    random.randint.assert_called_once()
-    np.random.choice.assert_not_called()
+    random.randint.assert_not_called()
+    np.random.choice.assert_called_once()
+    np.testing.assert_array_equal(npmocker.call_args[0][0],np.array([0,1]))
     
 def test_camel_at_bottom_of_stack_is_picked_when_there_is_a_racing_camel_between_two_crazy_camels(mocker):
     
@@ -103,3 +108,49 @@ def test_camel_at_bottom_of_stack_is_picked_when_there_is_a_racing_camel_between
     np.random.choice.assert_not_called()
     
     assert crazy_camel_no == 0
+    
+def test_crazy_camel_carrying_racing_camels_is_picked_over_crazy_carrying_crazy(mocker):
+    
+    mocker.patch('random.randint')
+    mocker.patch('numpy.random.choice')
+    
+    camel_list = []
+    camel_list.append( racing_camel(0,5) )
+    camel_list.append( crazy_camel(0,5) )
+    camel_list.append( crazy_camel(1,7) )
+    camel_list.append( crazy_camel(2,7) )
+    
+    state = race_state(camel_list)
+    state.camel_list[0].stack_position = 1
+    state.camel_list[1].stack_position = 0
+    
+    crazy_camel_no = state.pick_crazy_camel()
+    
+    random.randint.assert_not_called()
+    np.random.choice.assert_not_called()
+    
+    assert crazy_camel_no == 0
+    
+def test_one_of_crazy_camels_carrying_racing_camels_is_picked_over_lone_crazy(mocker):
+    
+    mocker.patch('random.randint')
+    npmocker = mocker.patch('numpy.random.choice')
+    
+    camel_list = []
+    camel_list.append( racing_camel(0,5) )
+    camel_list.append( racing_camel(1,7) )
+    camel_list.append( crazy_camel(0,5) )
+    camel_list.append( crazy_camel(1,7) )
+    camel_list.append( crazy_camel(2,9) )
+    
+    state = race_state(camel_list)
+    state.camel_list[0].stack_position = 1
+    state.camel_list[2].stack_position = 0
+    state.camel_list[1].stack_position = 1
+    state.camel_list[3].stack_position = 0
+    
+    state.pick_crazy_camel()
+    
+    random.randint.assert_not_called()
+    np.random.choice.assert_called_once()
+    np.testing.assert_array_equal(npmocker.call_args[0][0],np.array([0,1]))
