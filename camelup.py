@@ -272,7 +272,7 @@ class race_state:
 
         '''
         
-        furthest_back = 16
+        furthest_back = 1e10
         trailing_camel_id = 0
         
         for camel in self.camel_list:

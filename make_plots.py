@@ -95,13 +95,24 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
     plt.show()
     
 def event_probability_sublpot(fig, shape, text, values, state):
+    
     axis_leg_probs = fig.add_axes(shape)
     axis_leg_probs.text(0,4.8, text)
     axis_leg_probs.axis('off')
-    axis_leg_probs.barh(np.arange(state.racing_camel_count), values, align='center', color=constants.RACING_COLOURS)
     axis_leg_probs.set_xlim(0,1)
-    for i,value in enumerate(values):
-        axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
+    
+    if len(values) > 5:
+        top5 = pd.DataFrame(zip(values,constants.RACING_COLOURS)).sort_values(0).iloc[-5:]
+        axis_leg_probs.barh(np.arange(5), top5[0], align='center', color=top5[1])
+        
+        for i,value in enumerate(top5[0]):
+            axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
+        
+    else:
+        axis_leg_probs.barh(np.arange(state.racing_camel_count), values, align='center', color=constants.RACING_COLOURS)
+    
+        for i,value in enumerate(values):
+            axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
     
 def plot_win_probs(winners,title):
     '''
@@ -129,6 +140,9 @@ def plot_area(race_winners_list):
     winners_df = pd.DataFrame(race_winners_list)
     fig, ax = plt.subplots()
     ax.stackplot(winners_df.index, winners_df.values.T,colors=constants.RACING_COLOURS)
+    ax.set_ylim(0,winners_df.iloc[0].sum())
+    ax.set_xlim(0,len(winners_df)-1)
+    plt.show()
     
 def main():
     camel_list = []
