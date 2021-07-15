@@ -98,7 +98,7 @@ def event_probability_sublpot(fig, shape, text, values, state):
     axis_leg_probs = fig.add_axes(shape)
     axis_leg_probs.text(0,4.8, text)
     axis_leg_probs.axis('off')
-    axis_leg_probs.barh(np.arange(state.racing_camel_count), values, align='center', color=constants.RACING_COLOURS+['black'])
+    axis_leg_probs.barh(np.arange(state.racing_camel_count), values, align='center', color=constants.RACING_COLOURS)
     axis_leg_probs.set_xlim(0,1)
     for i,value in enumerate(values):
         axis_leg_probs.text(0.5,i-0.3,f'{round(value,2)}')
