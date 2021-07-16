@@ -89,6 +89,7 @@ class race_state:
         self.camels_to_move = [i for i in range(self.racing_camel_count)]
         self.camels_to_move.append('crazy')
         self.leg_num += 1
+        self.camels_moved_this_leg = []
 
     def set_stack(self):
         '''

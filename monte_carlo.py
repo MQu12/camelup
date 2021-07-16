@@ -178,5 +178,6 @@ def advance_camel(state):
         new_race_state.move_camel_to(new_race_state.racing_camel_count+crazy_camel_no, final_pos)
     
     new_race_state.camels_to_move.remove(camel_no)
+    new_race_state.camels_moved_this_leg.append(camel_no)
     
     return new_race_state

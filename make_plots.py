@@ -59,6 +59,7 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
     axis_main.set_xticks(np.arange(0, state.track_length+1, tick_spacing))
     axis_main.set_ylim(-0.5,ymax)
     
+    xpanel_offset = 0
     if state.racing_camel_count + state.crazy_camel_count < 8:
         axis_moved_camels = fig1.add_axes([0.12,0.5,0.1,0.3])
         axis_moved_camels.axis('off')
@@ -83,14 +84,31 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
         
         axis_moved_camels.set_ylim(-0.15,1)
     
+    else:
+        xpanel_offset = -0.08
+        axis_moved_camels = fig1.add_axes([0.12,0.42,0.8,0.06])
+        axis_moved_camels.axis('off')
+        axis_moved_camels.text(-0.02,0.06,'Moved this leg:')
+        
+        cols = np.array(state.camels_moved_this_leg)
+        xpos = np.arange(0,len(cols))/(state.racing_camel_count+1)
+        
+        if len(xpos) > 0:
+            ypos = np.zeros(len(xpos))
+            camel_display = pd.DataFrame([xpos,ypos]).T
+            axis_moved_camels.scatter(camel_display[0],
+                        camel_display[1],
+                        s=200,color=np.array(constants.RACING_COLOURS[:state.racing_camel_count]+['black'])[cols],marker=constants.racingCamelMarker)
+        axis_moved_camels.set_xlim(-0.05,1)
+    
     if type(leg_win_probs) == np.ndarray:
-        event_probability_sublpot(fig1, [0.22,0.51,0.1,0.23], 'Win leg', leg_win_probs, state)
+        event_probability_sublpot(fig1, [0.22+xpanel_offset,0.51,0.1,0.23], 'Win leg', leg_win_probs, state)
     
     if type(race_win_probs) == np.ndarray:
-        event_probability_sublpot(fig1, [0.35,0.51,0.1,0.23], 'Win race', race_win_probs, state)
+        event_probability_sublpot(fig1, [0.35+xpanel_offset,0.51,0.1,0.23], 'Win race', race_win_probs, state)
             
     if type(race_lose_probs) == np.ndarray:
-        event_probability_sublpot(fig1, [0.48,0.51,0.1,0.23], 'Lose race', race_lose_probs, state)
+        event_probability_sublpot(fig1, [0.48+xpanel_offset,0.51,0.1,0.23], 'Lose race', race_lose_probs, state)
     
     plt.show()
     

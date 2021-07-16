@@ -10,14 +10,18 @@ import monte_carlo
 import make_plots
 import constants
 
-constants.RANDOM_SEED = 1
+constants.RANDOM_SEED = 2
 
+print('Initialising race')
 bigstate = race_state(n_racing_camels=20,n_crazy_camels=5,track_length=100,leg_length=15)
 
 race_winners_list = []
 race_losers_list = []
 
+print('Simulating race')
 final_state,all_states_list = monte_carlo.simulate_race(bigstate,True)
+
+print('Calculating probabilities')
 for state in all_states_list:
     
     leg_winners = monte_carlo.simulate_leg_n_times(state, 100)
