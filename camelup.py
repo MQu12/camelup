@@ -10,9 +10,6 @@ import random
 import constants
 import numpy as np
 
-random.seed(constants.RANDOM_SEED)
-np.random.seed(constants.RANDOM_SEED)
-
 class race_state:
 
     def __init__(self, camel_list=None,
@@ -48,6 +45,9 @@ class race_state:
         None.
 
         '''
+        
+        random.seed(constants.RANDOM_SEED)
+        np.random.seed(constants.RANDOM_SEED)
         
         self.game_end = False
         

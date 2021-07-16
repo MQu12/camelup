@@ -12,6 +12,7 @@ import constants
 
 def reseed():
     random.seed(constants.RANDOM_SEED)
+    np.random.seed(constants.RANDOM_SEED)
 
 reseed()
 

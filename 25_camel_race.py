@@ -21,6 +21,8 @@ race_losers_list = []
 print('Simulating race')
 final_state,all_states_list = monte_carlo.simulate_race(bigstate,True)
 
+monte_carlo.reseed()
+
 print('Calculating probabilities')
 for state in all_states_list:
     
