@@ -91,6 +91,7 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
         axis_moved_camels.text(-0.02,0.06,'Moved this leg:')
         
         cols = np.array(state.camels_moved_this_leg)
+        cols = np.where(cols=='crazy',-1,cols).astype(int)
         xpos = np.arange(0,len(cols))/(state.racing_camel_count+1)
         
         if len(xpos) > 0:
