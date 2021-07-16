@@ -33,3 +33,26 @@ crazyCamelMarker = parse_path("""M1500 1735 c-105 -30 -181 -95 -265 -230 -111 -1
 crazyCamelMarker.vertices -= crazyCamelMarker.vertices.mean(axis=0)
 
 RANDOM_SEED = 1
+
+RACING_COLOURS = ['red',
+                  'green',
+                  'orange',
+                  'blue',
+                  'purple',
+                  'brown',
+                  'pink',
+                  'olive',
+                  'cyan',
+                  'maroon',
+                  'darkblue',
+                  'lawngreen',
+                  'dodgerblue',
+                  'crimson',
+                  'turquoise',
+                  'yellow',
+                  'beige',
+                  'sandybrown',
+                  'lime',
+                  'darkgreen'
+                  ]
+CRAZY_COLOURS = ['black','white','gray','darkgray','lightgray']
