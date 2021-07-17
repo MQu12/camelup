@@ -56,3 +56,10 @@ RACING_COLOURS = ['red',
                   'darkgreen'
                   ]
 CRAZY_COLOURS = ['black','white','gray','darkgray','lightgray']
+
+def printcols():
+    import matplotlib.pyplot as plt
+    for col in RACING_COLOURS:
+        plt.bar(0,1,color=col)
+        plt.text(0,0.5,col)
+        plt.show()

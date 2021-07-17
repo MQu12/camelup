@@ -94,12 +94,11 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
         cols = np.where(cols=='crazy',-1,cols).astype(int)
         xpos = np.arange(0,len(cols))/(state.racing_camel_count+1)
         
-        if len(xpos) > 0:
-            ypos = np.zeros(len(xpos))
-            camel_display = pd.DataFrame([xpos,ypos]).T
-            axis_moved_camels.scatter(camel_display[0],
-                        camel_display[1],
-                        s=200,color=np.array(constants.RACING_COLOURS[:state.racing_camel_count]+['black'])[cols],marker=constants.racingCamelMarker)
+        ypos = np.zeros(len(xpos))
+        camel_display = pd.DataFrame([xpos,ypos]).T
+        axis_moved_camels.scatter(camel_display[0],
+                    camel_display[1],
+                    s=200,color=np.array(constants.RACING_COLOURS[:state.racing_camel_count]+['black'])[cols],marker=constants.racingCamelMarker)
         axis_moved_camels.set_xlim(-0.05,1)
     
     if type(leg_win_probs) == np.ndarray:
@@ -110,6 +109,12 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
             
     if type(race_lose_probs) == np.ndarray:
         event_probability_sublpot(fig1, [0.48+xpanel_offset,0.51,0.1,0.23], 'Lose race', race_lose_probs, state)
+    
+    if len(state.leg_winners) > 0:
+        axis_last_leg_winner = fig1.add_axes([0.6,0.6,0.3,0.2])
+        axis_last_leg_winner.axis('off')
+        axis_last_leg_winner.scatter(0,0,color=constants.RACING_COLOURS[state.leg_winners[-1]],s=400,marker=constants.racingCamelMarker)
+        axis_last_leg_winner.text(-0.033,-0.018,'Previous\nleg winner',ha='center')
     
     plt.show()
     
@@ -155,12 +160,96 @@ def plot_win_probs(winners,title):
     plt.show()
     
 def plot_area(race_winners_list):
+    '''
+    Plot an area plot of the win/lose probabilities per camel
+
+    Parameters
+    ----------
+    race_winners_list : list(np.ndarray)
+        List of win probs per camel per step.
+
+    Returns
+    -------
+    None.
+
+    '''
     
     winners_df = pd.DataFrame(race_winners_list)
     fig, ax = plt.subplots()
     ax.stackplot(winners_df.index, winners_df.values.T,colors=constants.RACING_COLOURS)
     ax.set_ylim(0,winners_df.iloc[0].sum())
     ax.set_xlim(0,len(winners_df)-1)
+    plt.show()
+    
+def plot_movement_per_camel(final_state):
+    
+    movement_array = []
+    
+    for camel in final_state.camel_list:
+        if type(camel) == racing_camel:
+            movement_array.append(camel.total_movement)
+
+    movement_array = np.array(movement_array)
+    ypos = np.zeros(len(movement_array))
+    
+    for i, move in enumerate(movement_array):
+        count = list(movement_array[:i]).count(move)
+        ypos[i] += count
+    
+    plt.figure(facecolor='white')
+    axis_main = plt.axes()
+    axis_main.scatter(movement_array, ypos, color=constants.RACING_COLOURS, marker=constants.racingCamelMarker, s=400, zorder=1 )  
+    axis_main.set_xticks(np.arange(movement_array.min(), movement_array.max()+1))
+    axis_main.axes.get_yaxis().set_visible(False)
+    
+    move_range = movement_array.max() - movement_array.min()
+    axis_main.set_ylim(-0.5,(move_range*16/20))
+    axis_main.set_xlabel('Movement per camel')
+    
+    plt.show()
+    
+def plot_move_efficiency_per_camel(final_state):
+    
+    movement_array = []
+    distance_array = []
+    
+    for camel in final_state.camel_list:
+        if type(camel) == racing_camel:
+            movement_array.append(camel.total_movement)
+            distance_array.append(camel.position)
+            
+    eff_array = np.array(distance_array)/np.array(movement_array)
+    xpos = np.arange(0,len(eff_array))
+       
+    plt.bar(xpos,eff_array,color=constants.RACING_COLOURS, zorder=0)     
+    plt.scatter(xpos,eff_array, color=constants.RACING_COLOURS, marker=constants.racingCamelMarker, edgecolors='white', s=400, zorder=1)  
+    plt.axes().get_xaxis().set_visible(False)
+    plt.ylabel('Distance covered per movement')
+    plt.show()
+    
+def plot_leg_winners(final_state):
+    
+    winner_per_leg = np.array(constants.RACING_COLOURS)[final_state.leg_winners]
+    xpos = np.arange(1,len(winner_per_leg)+1)
+    ypos = np.zeros(len(winner_per_leg))
+    
+    plt.scatter(xpos,ypos, color=winner_per_leg, marker=constants.racingCamelMarker, s=90)
+    plt.axes().get_yaxis().set_visible(False)
+    plt.xlabel('Leg')
+    plt.title('Winner per leg')
+    plt.show()
+    
+def plot_leg_wins_per_camel(final_state):
+    
+    wins = np.bincount(np.array(final_state.leg_winners))
+    x = np.arange(0,len(wins))
+    cols = constants.RACING_COLOURS[:len(wins)]
+    
+    plt.bar(x,wins,color=cols,zorder=0)
+    plt.scatter(x,wins,color=cols, marker=constants.racingCamelMarker, edgecolors='white', s=400, zorder=1)  
+    plt.axes().get_xaxis().set_visible(False)
+    plt.xlabel('Camel')
+    plt.ylabel('Leg wins')
     plt.show()
     
 def main():

@@ -10,13 +10,14 @@ import monte_carlo
 import make_plots
 import constants
 
-constants.RANDOM_SEED = 2
+constants.RANDOM_SEED = 3
 
 print('Initialising race')
 bigstate = race_state(n_racing_camels=20,n_crazy_camels=5,track_length=100,leg_length=15)
 
 race_winners_list = []
 race_losers_list = []
+leg_winners_list = []
 
 print('Simulating race')
 final_state,all_states_list = monte_carlo.simulate_race(bigstate,True)
@@ -36,6 +37,12 @@ for state in all_states_list:
 
     race_winners_list.append(race_winners)
     race_losers_list.append(race_losers)
+    leg_winners_list.append(leg_winners)
     
 make_plots.plot_area(race_winners_list)
 make_plots.plot_area(race_losers_list)
+make_plots.plot_area(leg_winners_list)
+make_plots.plot_movement_per_camel(final_state)
+make_plots.plot_move_efficiency_per_camel(final_state)
+make_plots.plot_leg_winners(final_state)
+make_plots.plot_leg_wins_per_camel(final_state)

@@ -11,6 +11,7 @@ class camel:
         self.id = id
         self.position = position
         self.stack_position = stack_position
+        self.total_movement = 0
         
     def camel_direction(self):
         raise NotImplementedError

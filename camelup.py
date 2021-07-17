@@ -72,6 +72,7 @@ class race_state:
         
         self.leg_num = 0
         self.num_moves = 0
+        self.leg_winners = []
 
         self.set_stack()
         self.reset_leg()
@@ -85,7 +86,8 @@ class race_state:
         None.
 
         '''
-        
+        if self.leg_num > 0:
+            self.leg_winners.append(self.get_leader())
         self.camels_to_move = [i for i in range(self.racing_camel_count)]
         self.camels_to_move.append('crazy')
         self.leg_num += 1
@@ -160,6 +162,8 @@ class race_state:
         camels_to_move = []
         camels_at_destination = 0
         
+        self.camel_list[camel_no].total_movement += (final_pos-init_camel_pos)
+        
         for i,camel in enumerate(self.camel_list):
             
             if camel.position == init_camel_pos and camel.stack_position >= target_camel_stack_pos:
@@ -168,6 +172,7 @@ class race_state:
             if camel.position == final_pos:
                 camels_at_destination += 1
                 
+        # move the other camels in the stack
         for camel_id in camels_to_move:
             self.camel_list[camel_id].position = final_pos
             self.camel_list[camel_id].stack_position += (camels_at_destination - target_camel_stack_pos)
