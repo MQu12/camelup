@@ -42,7 +42,7 @@ def simulate_leg(prev_state, output_all=False):
     
     new_state = deepcopy(prev_state)
     
-    camels_moved_in_leg = (new_state.racing_camel_count + (1 if new_state.crazy_camel_count>0 else 0)) - len(new_state.camels_to_move)
+    camels_moved_in_leg = new_state.racing_camel_count + new_state.n_crazy_dice - len(new_state.camels_to_move)
     
     for i in range(new_state.leg_length-camels_moved_in_leg):
         if new_state.game_end:

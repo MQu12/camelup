@@ -55,7 +55,7 @@ RACING_COLOURS = ['red',
                   'lime',
                   'darkgreen'
                   ]
-CRAZY_COLOURS = ['black','white','gray','darkgray','lightgray']
+CRAZY_COLOURS = ['black','white','gray','darkgray','lightgray','silver','grey','whitesmoke']
 
 def printcols():
     import matplotlib.pyplot as plt

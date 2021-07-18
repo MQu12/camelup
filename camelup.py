@@ -13,7 +13,7 @@ import numpy as np
 class race_state:
 
     def __init__(self, camel_list=None,
-                 n_racing_camels=5, n_crazy_camels=2,
+                 n_racing_camels=5, n_crazy_camels=2, n_crazy_dice = 1,
                  track_length=16, leg_length=5, min_roll=1, max_roll=3):
         '''
         Intialise the race state
@@ -55,6 +55,7 @@ class race_state:
         self.leg_length = leg_length
         self.max_roll = max_roll
         self.min_roll = min_roll
+        self.n_crazy_dice = n_crazy_dice
         
         if camel_list:
             self.camel_list = camel_list
@@ -89,7 +90,8 @@ class race_state:
         if self.leg_num > 0:
             self.leg_winners.append(self.get_leader())
         self.camels_to_move = [i for i in range(self.racing_camel_count)]
-        self.camels_to_move.append('crazy')
+        for i in range(self.n_crazy_dice):
+            self.camels_to_move.append('crazy')
         self.leg_num += 1
         self.camels_moved_this_leg = []
 

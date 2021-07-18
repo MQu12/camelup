@@ -10,10 +10,10 @@ import monte_carlo
 import make_plots
 import constants
 
-constants.RANDOM_SEED = 3
+constants.RANDOM_SEED = 4
 
 print('Initialising race')
-bigstate = race_state(n_racing_camels=20,n_crazy_camels=5,track_length=100,leg_length=15)
+bigstate = race_state(n_racing_camels=20,n_crazy_camels=8,n_crazy_dice=4,track_length=100,leg_length=20)
 
 race_winners_list = []
 race_losers_list = []
