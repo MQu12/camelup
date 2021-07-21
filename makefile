@@ -1,13 +1,11 @@
-#all: function.o library.so
-#	x86_64-w64-mingw32-g++ -shared -c -fPIC simulate_leg.cpp -static-libgcc -static-libstdc++ -o simulate_leg.o
-#	x86_64-w64-mingw32-g++ -shared -static-libgcc -static-libstdc++ -Wl,-soname,library.so -o library.dll simulate_leg.o
 
-# location of the Boost Python include files and library
 HEADERS = ./headers
-# compile mesh classes
+
+test_classes.exe: test_classes.cpp camel.o racing_camel.o
+	x86_64-w64-mingw32-g++ -I$(HEADERS) -static-libgcc -static-libstdc++ test_classes.cpp -o test_classes.exe camel.o racing_camel.o
 library.dll: camel.o racing_camel.o
 	x86_64-w64-mingw32-g++ -shared -Wl,--export-all-symbols camel.o -static-libgcc -static-libstdc++ -o library.dll
-camel.o: src/camel.cpp
-	x86_64-w64-mingw32-g++ -shared -I$(HEADERS) -fPIC -c -static-libgcc -static-libstdc++ src/camel.cpp
 racing_camel.o: src/racing_camel.cpp
 	x86_64-w64-mingw32-g++ -shared -I$(HEADERS) -fPIC -c -static-libgcc -static-libstdc++ src/racing_camel.cpp
+camel.o: src/camel.cpp
+	x86_64-w64-mingw32-g++ -shared -I$(HEADERS) -fPIC -c -static-libgcc -static-libstdc++ src/camel.cpp
