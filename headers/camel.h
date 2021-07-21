@@ -1,3 +1,5 @@
+#ifndef CAMEL
+#define CAMEL
 
 struct camel{
 
@@ -10,3 +12,5 @@ struct camel{
 	virtual int direction() = 0;
 
 };
+
+#endif
