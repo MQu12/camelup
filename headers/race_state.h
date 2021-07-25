@@ -13,9 +13,10 @@ private:
 	int n_crazy_dice = 1;
 	int leg_num = 0;
 	int num_moves = 0;
-	vector<camel*> camel_vec;
-	vector<int> leg_winners;
-	vector<int> camel_moved_this_leg;
+	std::vector<camel*> camel_vec;
+	std::vector<int> leg_winners;
+	std::vector<int> camel_moved_this_leg;
+	std::vector<int> camels_to_move;
 
 	int n_racing_camels;
 	int n_crazy_camels;
@@ -24,6 +25,7 @@ private:
 
 public:
 	race_state();
+	~race_state();
 	race_state(int n_racing_camels=5, int n_crazy_camels=2, int n_crazy_dice=1, int track_length=16,int leg_length=5,int min_roll=1,int max_roll=3);
 	race_state(std::vector<camel*> camel_vec);
 

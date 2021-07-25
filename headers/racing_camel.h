@@ -1,6 +1,7 @@
 #ifndef RACING_CAMEL
 #define RACING_CAMEL
 
+#include <string>
 #include "camel.h"
 
 struct racing_camel: public camel{
@@ -13,6 +14,7 @@ public:
 		
 	}
 	int direction();
+	std::string camel_type();
 
 };
 
