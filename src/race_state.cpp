@@ -2,6 +2,7 @@
 #include <string>
 #include <stdlib.h>
 #include <bits/stdc++.h>
+#include <stdexcept>
 #include "race_state.h"
 #include "camel.h"
 #include "racing_camel.h"
@@ -133,5 +134,74 @@ void race_state::move_camel_to(int camel_no, int final_pos){
 		game_end = true;
 
 	num_moves++;
+
+}
+
+int race_state::pick_crazy_camel(){
+
+	std::vector<crazy_camel*> crazy_camel_vec;
+
+	for(int i=n_racing_camels; i<camel_vec.size(); i++)
+		crazy_camel_vec.push_back((crazy_camel*) camel_vec[i]);
+
+	// check if either crazy camel is carrying any racing camels
+	std::vector<bool> crazy_camels_carrying;
+	for(int i=0; i<n_crazy_camels; i++)
+		crazy_camels_carrying.push_back(false);
+
+	for(int i=0; i<n_racing_camels;i++){
+		// camels not in a stack cannot be being carried
+		if (camel_vec[i]->stack_position == 0)
+			continue;
+		for(int j=0; j<crazy_camel_vec.size();j++){
+			if(crazy_camels_carrying[j])
+				continue;
+			else if(crazy_camel_vec[j]->position == camel_vec[i]->position && crazy_camel_vec[j]->stack_position + 1 == camel_vec[i]->stack_position)
+				crazy_camels_carrying[j] = true;
+		}
+	}
+
+	int sum_carrying = 0;
+	for(bool carrying : crazy_camels_carrying){
+		sum_carrying += carrying;
+	}
+	// if only one is carrying, return it
+	if (sum_carrying == 1){
+		for(int i=0; i<crazy_camels_carrying.size(); i++){
+			if(crazy_camels_carrying[i])
+				return i;
+		}
+		throw std::invalid_argument( "Sum of crazy camels carrying == 1, but can't find camel which carrying." ); 
+	}
+	// if others exist, pick one at random
+	else if(sum_carrying > 1){
+		std::vector<int> carrying_camels_id;
+		for(int i=0; i<n_crazy_camels; i++){
+			crazy_camels_carrying.push_back(i);
+		}
+		int rand_id = rand()%sum_carrying;
+		return carrying_camels_id[rand_id];
+	}
+
+	// determine which (if any) crazy camels are directly on top of another
+	std::vector<int> crazy_id_carried_by_crazy;
+	for(crazy_camel* crazy1 : crazy_camel_vec)
+		for(crazy_camel* crazy2 : crazy_camel_vec)
+			if(crazy1->position == crazy2->position && crazy1->stack_position == crazy2->stack_position + 1)
+				crazy_id_carried_by_crazy.push_back(crazy1->id);
+
+	int n_crazies_carrying_crazies = crazy_id_carried_by_crazy.size();
+	// if only one crazy camel sits directly atop another, return it
+	if(n_crazies_carrying_crazies == 1)
+		return crazy_id_carried_by_crazy[0];
+	// if more than once, pick one at random
+	else if(n_crazies_carrying_crazies > 1){
+		int rand_id = rand()%n_crazies_carrying_crazies;
+		return crazy_id_carried_by_crazy[rand_id];
+	}
+
+	// otherwise, pick one at random
+	int rand_id = rand()%n_crazy_camels;
+	return rand_id;
 
 }

@@ -200,11 +200,11 @@ class race_state:
         
         crazy_camel_list = [camel for camel in self.camel_list[self.racing_camel_count:]]
         
-        # check if either crazy camel is carrying any racing camels
+        # check if any crazy camel is carrying any racing camels
         crazy_camels_carrying = np.zeros(len(crazy_camel_list), dtype=bool)
         
         for i in range(0,self.racing_camel_count):
-            #camels not in a stack cannpt be being carried
+            #camels not in a stack cannot be being carried
             if self.camel_list[i].stack_position == 0:
                 continue
             for j, crazy_camel_j in enumerate(crazy_camel_list):
