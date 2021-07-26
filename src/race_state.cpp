@@ -44,11 +44,8 @@ race_state::race_state(std::vector<camel*> camel_vec): camel_vec(camel_vec){
 
 }
 race_state::race_state():
-	race_state(5)
-{
-	set_stack();
-	reset_leg();
-}
+	race_state(5,2,1)
+{}
 race_state::~race_state(){
 
 	for(camel* c : camel_vec){
@@ -203,5 +200,60 @@ int race_state::pick_crazy_camel(){
 	// otherwise, pick one at random
 	int rand_id = rand()%n_crazy_camels;
 	return rand_id;
+
+}
+int race_state::get_leader(){
+
+	int largest_forward = 0;
+	int largest_upward = 0;
+	int leading_camel_id = 0;
+
+	for(camel* c : camel_vec){
+
+		if (c->camel_type() != "racing")
+			continue;
+		else if(c->position > largest_forward || (c->position == largest_forward && c->stack_position > largest_upward)){
+			largest_forward = c->position;
+			largest_upward = c->stack_position;
+			leading_camel_id = c->id;
+		}
+		else
+			continue;
+
+	}
+
+	return leading_camel_id;
+}
+
+int race_state::get_last_place(){
+
+	int furthest_back = 100000000;
+	int lowest_down = 100000000;
+	int trailing_camel_id = 0;
+
+	for(camel* c : camel_vec){
+
+		if (c->camel_type() != "racing")
+			continue;
+		else if(c->position < furthest_back || (c->position == furthest_back && c->stack_position < lowest_down)){
+			furthest_back = c->position;
+			lowest_down = c->stack_position;
+			trailing_camel_id = c->id;
+		}
+		else
+			continue;
+
+	}
+	return trailing_camel_id;
+}
+std::string race_state::print_wrap(){
+
+	std::string output = "State after " + std::to_string(num_moves) + " moves\nLeg " + std::to_string(leg_num);
+
+	for(camel* c : camel_vec){
+		output += (std::string("\n")+c->print_wrap());
+	}
+
+	return output;
 
 }

@@ -14,6 +14,7 @@ struct camel{
 	~camel(){}
 	virtual int direction() = 0;
 	virtual std::string camel_type() = 0;
+	std::string print_wrap();
 
 };
 

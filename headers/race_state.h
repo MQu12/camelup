@@ -26,7 +26,7 @@ private:
 public:
 	race_state();
 	~race_state();
-	race_state(int n_racing_camels=5, int n_crazy_camels=2, int n_crazy_dice=1, int track_length=16,int leg_length=5,int min_roll=1,int max_roll=3);
+	race_state(int n_racing_camels, int n_crazy_camels, int n_crazy_dice, int track_length=16,int leg_length=5,int min_roll=1,int max_roll=3);
 	race_state(std::vector<camel*> camel_vec);
 
 	void reset_leg();
