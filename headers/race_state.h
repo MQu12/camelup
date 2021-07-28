@@ -1,3 +1,6 @@
+#ifndef RACE_STATE
+#define RACE_STATE
+
 #include <vector>
 #include <string>
 #include "camel.h"
@@ -37,4 +40,14 @@ public:
 	int get_last_place();
 	std::string print_wrap();
 
+	bool get_game_end() const{return game_end;}
+	int get_n_crazy_camels() const{return n_crazy_camels;}
+	int get_n_racing_camels() const{return n_racing_camels;}
+	int get_n_crazy_dice() const{return n_crazy_dice;}
+	std::vector<int> get_camels_to_move() const{return camels_to_move;}	
+
+	friend std::ostream& operator<<(std::ostream& os, const race_state& r);
+
 };
+
+#endif

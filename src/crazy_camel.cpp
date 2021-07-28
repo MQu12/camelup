@@ -4,6 +4,6 @@
 int crazy_camel::direction(){
 	return -1;
 }
-std::string crazy_camel::camel_type(){
+std::string crazy_camel::camel_type() const{
 	return "crazy";
 }

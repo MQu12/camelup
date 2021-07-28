@@ -1,14 +1,30 @@
 #include <boost/python.hpp>
 #include <Python.h>
 
-//modules to export
+//items to export
 #include "racing_camel.h"
 #include "crazy_camel.h"
 #include "race_state.h"
 
+template<class T>
+struct VecToList
+{
+    static PyObject* convert(const std::vector<T>& vec)
+    {
+        boost::python::list* l = new boost::python::list();
+        for(size_t i = 0; i < vec.size(); i++) {
+            l->append(vec[i]);
+        }
+
+        return l->ptr();
+    }
+};
+
 BOOST_PYTHON_MODULE(cpp_camels)
 {
     using namespace boost::python;
+
+    to_python_converter<std::vector<int, std::allocator<int> >, VecToList<int> >();
 
     class_<racing_camel>("racing_camel", init<int,int,int,int>())
         .def("direction", &racing_camel::direction)
@@ -31,5 +47,11 @@ BOOST_PYTHON_MODULE(cpp_camels)
     	.def("pick_crazy_camel",&race_state::pick_crazy_camel)
     	.def("get_leader",&race_state::get_leader)
     	.def("get_last_place",&race_state::get_last_place)
-    	.def("print_wrap",&race_state::print_wrap);
+    	.def("print_wrap",&race_state::print_wrap)
+        .def("get_game_end" ,&race_state::get_game_end)
+        .def("get_n_crazy_camels",&race_state::get_n_crazy_camels)
+        .def("get_n_racing_camels",&race_state::get_n_racing_camels)
+        .def("get_n_crazy_dice",&race_state::get_n_crazy_dice)
+        .def("get_camels_to_move",&race_state::get_camels_to_move)
+        .def(self_ns::str(self));
 }

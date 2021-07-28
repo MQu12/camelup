@@ -257,3 +257,16 @@ std::string race_state::print_wrap(){
 	return output;
 
 }
+
+std::ostream& operator<<(std::ostream& os, const race_state& r){
+
+	os << "State after " << r.num_moves << " moves " << std::endl
+	   << "Leg " << r.leg_num << std::endl;
+
+	for(camel* c : r.camel_vec){
+		os << *c << std::endl;
+	}
+	
+	return os;
+
+}
