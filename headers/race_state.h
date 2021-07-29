@@ -18,7 +18,7 @@ private:
 	int num_moves = 0;
 	std::vector<camel*> camel_vec;
 	std::vector<int> leg_winners;
-	std::vector<int> camel_moved_this_leg;
+	std::vector<int> camels_moved_this_leg;
 	std::vector<int> camels_to_move;
 
 	int n_racing_camels;
@@ -39,12 +39,22 @@ public:
 	int get_leader();
 	int get_last_place();
 	std::string print_wrap();
+	void mark_camel_moved(int camel_no);
 
 	bool get_game_end() const{return game_end;}
 	int get_n_crazy_camels() const{return n_crazy_camels;}
 	int get_n_racing_camels() const{return n_racing_camels;}
 	int get_n_crazy_dice() const{return n_crazy_dice;}
+	int get_leg_length() const{return leg_length;}
+	int get_min_roll() const{return min_roll;}
+	int get_max_roll() const{return max_roll;}
+	int get_leg_num() const{return leg_num;}
+	int get_num_moves() const{return num_moves;}
+	int get_track_length() const{return track_length;}
 	std::vector<int> get_camels_to_move() const{return camels_to_move;}	
+	std::vector<int> get_camels_moved_this_leg() const{return camels_moved_this_leg;}
+	std::vector<int> get_leg_winners() const{return leg_winners;}
+	std::vector<camel*> get_camel_list() const{return camel_vec;}
 
 	friend std::ostream& operator<<(std::ostream& os, const race_state& r);
 

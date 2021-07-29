@@ -70,7 +70,7 @@ void race_state::reset_leg(){
 		camels_to_move.push_back(-1);
 	}
 	leg_num++;
-	camel_moved_this_leg.clear();
+	camels_moved_this_leg.clear();
 
 }
 
@@ -268,5 +268,11 @@ std::ostream& operator<<(std::ostream& os, const race_state& r){
 	}
 	
 	return os;
+
+}
+
+void race_state::mark_camel_moved(int camel_no){
+
+	camels_moved_this_leg.push_back(camel_no);
 
 }

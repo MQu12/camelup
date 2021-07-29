@@ -5,6 +5,7 @@
 #include "racing_camel.h"
 #include "crazy_camel.h"
 #include "race_state.h"
+#include "camel.h"
 
 template<class T>
 struct VecToList
@@ -25,6 +26,7 @@ BOOST_PYTHON_MODULE(cpp_camels)
     using namespace boost::python;
 
     to_python_converter<std::vector<int, std::allocator<int> >, VecToList<int> >();
+    to_python_converter<std::vector<camel*, std::allocator<camel*> >, VecToList<camel*> >();
 
     class_<racing_camel>("racing_camel", init<int,int,int,int>())
         .def("direction", &racing_camel::direction)
@@ -48,10 +50,20 @@ BOOST_PYTHON_MODULE(cpp_camels)
     	.def("get_leader",&race_state::get_leader)
     	.def("get_last_place",&race_state::get_last_place)
     	.def("print_wrap",&race_state::print_wrap)
+        .def("mark_camel_moved",&race_state::mark_camel_moved)
         .def("get_game_end" ,&race_state::get_game_end)
         .def("get_n_crazy_camels",&race_state::get_n_crazy_camels)
         .def("get_n_racing_camels",&race_state::get_n_racing_camels)
         .def("get_n_crazy_dice",&race_state::get_n_crazy_dice)
+        .def("get_leg_length",&race_state::get_leg_length)
+        .def("get_min_roll",&race_state::get_min_roll)
+        .def("get_max_roll",&race_state::get_max_roll)
+        .def("get_leg_num",&race_state::get_leg_num)
+        .def("get_num_moves",&race_state::get_num_moves)
+        .def("get_track_length",&race_state::get_track_length)
         .def("get_camels_to_move",&race_state::get_camels_to_move)
+        .def("get_camels_moved_this_leg",&race_state::get_camels_moved_this_leg)
+        .def("get_leg_winners",&race_state::get_leg_winners)
+        .def("get_camel_list",&race_state::get_camel_list)
         .def(self_ns::str(self));
 }

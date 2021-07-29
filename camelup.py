@@ -305,3 +305,34 @@ class race_state:
     
     def __repr__(self):
         return str(self)
+
+    def mark_camel_moved(self,camel_id):
+        self.camels_moved_this_leg.append(camel_id)
+    def get_game_end(self):
+        return self.game_end
+    def get_n_crazy_camels(self):
+        return self.crazy_camel_count
+    def get_n_racing_camels(self):
+        return self.racing_camel_count
+    def get_n_crazy_dice(self):
+        return self.n_crazy_dice
+    def get_leg_length(self):
+        return self.leg_length
+    def get_min_roll(self):
+        return self.min_roll
+    def get_max_roll(self):
+        return self.max_roll
+    def get_leg_num(self):
+        return self.leg_num
+    def get_num_moves(self):
+        return self.num_moves
+    def get_track_length(self):
+        return self.track_length
+    def get_camels_to_move(self):
+        return self.camels_to_move
+    def get_camels_moved_this_leg(self):
+        return self.camels_moved_this_leg
+    def get_leg_winners(self):
+        return self.leg_winners
+    def get_camel_list(self):
+        return self.camel_list

@@ -5,6 +5,11 @@ Created on Sat Jul 10 08:34:22 2021
 @author: Dr. P
 """
 
+# 0 = show, 1 = save
+PLOT_METHOD = 0
+
+USE_CPP_CLASSES = True
+
 from svgpath2mpl import parse_path
 
 racingCamelMarker = parse_path("""M1047 1740 c-97 -25 -153 -75 -257 -231 -104 -156 -143 -189 -227
