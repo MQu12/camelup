@@ -8,7 +8,7 @@ Created on Sat Jul 10 08:34:22 2021
 # 0 = show, 1 = save
 PLOT_METHOD = 0
 
-USE_CPP_CLASSES = True
+USE_CPP_CLASSES = False
 
 from svgpath2mpl import parse_path
 

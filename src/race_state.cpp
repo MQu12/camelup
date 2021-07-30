@@ -16,7 +16,6 @@ race_state::race_state(int n_racing_camels, int n_crazy_camels, int n_crazy_dice
 	min_roll(min_roll),
 	max_roll(max_roll)
 {
-
 	for(int i=0; i<n_racing_camels; i++){
 		int start_pos = rand()%3 + 1;
 		camel_vec.push_back(
@@ -44,8 +43,30 @@ race_state::race_state(std::vector<camel*> camel_vec): camel_vec(camel_vec){
 
 }
 race_state::race_state():
-	race_state(5,2,1)
-{}
+	race_state(5,2,1){}
+race_state::race_state(const race_state &r){
+
+	//deep copy camel list
+	for(camel* c : r.camel_vec){
+		camel_vec.push_back( c->copy() );
+	}
+
+	game_end = r.game_end;
+	track_length = r.track_length;
+	leg_length = r.leg_length;
+	min_roll = r.min_roll;
+	max_roll = r.max_roll;
+	n_crazy_dice = r.n_crazy_dice;
+	leg_num = r.leg_num;
+	num_moves = r.num_moves;
+	n_racing_camels = r.n_racing_camels;
+	n_crazy_camels = r.n_crazy_camels;
+
+	std::vector<int> leg_winners = std::vector<int>(r.leg_winners);
+	std::vector<int> camels_moved_this_leg = std::vector<int>(r.camels_moved_this_leg);
+	std::vector<int> camels_to_move = std::vector<int>(r.camels_to_move);
+
+}
 race_state::~race_state(){
 
 	for(camel* c : camel_vec){
@@ -54,6 +75,11 @@ race_state::~race_state(){
 
 	}
 	camel_vec.clear();
+
+}
+race_state race_state::deepcopy() const{
+
+	return race_state(*this);
 
 }
 
@@ -88,7 +114,7 @@ void race_state::set_stack(){
 
 }
 
-int race_state::get_number_of_camel_types(std::string camel_type){
+int race_state::get_number_of_camel_types(std::string camel_type) const{
 
 	int count = 0;
 	for(camel* c : camel_vec){
@@ -134,7 +160,7 @@ void race_state::move_camel_to(int camel_no, int final_pos){
 
 }
 
-int race_state::pick_crazy_camel(){
+int race_state::pick_crazy_camel() const{
 
 	std::vector<crazy_camel*> crazy_camel_vec;
 
@@ -202,7 +228,7 @@ int race_state::pick_crazy_camel(){
 	return rand_id;
 
 }
-int race_state::get_leader(){
+int race_state::get_leader() const{
 
 	int largest_forward = 0;
 	int largest_upward = 0;
@@ -225,7 +251,7 @@ int race_state::get_leader(){
 	return leading_camel_id;
 }
 
-int race_state::get_last_place(){
+int race_state::get_last_place() const{
 
 	int furthest_back = 100000000;
 	int lowest_down = 100000000;
@@ -245,17 +271,6 @@ int race_state::get_last_place(){
 
 	}
 	return trailing_camel_id;
-}
-std::string race_state::print_wrap(){
-
-	std::string output = "State after " + std::to_string(num_moves) + " moves\nLeg " + std::to_string(leg_num);
-
-	for(camel* c : camel_vec){
-		output += (std::string("\n")+c->print_wrap());
-	}
-
-	return output;
-
 }
 
 std::ostream& operator<<(std::ostream& os, const race_state& r){

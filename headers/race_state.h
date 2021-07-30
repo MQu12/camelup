@@ -31,15 +31,17 @@ public:
 	~race_state();
 	race_state(int n_racing_camels, int n_crazy_camels, int n_crazy_dice, int track_length=16,int leg_length=5,int min_roll=1,int max_roll=3);
 	race_state(std::vector<camel*> camel_vec);
+	race_state(const race_state &r);
 
+	race_state deepcopy() const;
 	void reset_leg();
-	int get_number_of_camel_types(std::string camel_type);
 	void move_camel_to(int camel_no, int final_pos);
-	int pick_crazy_camel();
-	int get_leader();
-	int get_last_place();
-	std::string print_wrap();
+	int pick_crazy_camel() const;
 	void mark_camel_moved(int camel_no);
+
+	int get_number_of_camel_types(std::string camel_type) const;
+	int get_leader() const;
+	int get_last_place() const;
 
 	bool get_game_end() const{return game_end;}
 	int get_n_crazy_camels() const{return n_crazy_camels;}
