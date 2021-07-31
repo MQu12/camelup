@@ -5,7 +5,6 @@ Created on Thu Jul  8 18:06:32 2021
 @author: Dr. P
 """
 
-from copy import deepcopy
 import numpy as np
 import random
 import constants
@@ -40,7 +39,7 @@ def simulate_leg(prev_state, output_all=False):
     if output_all:
         all_states_list = []
     
-    new_state = deepcopy(prev_state)
+    new_state = prev_state.deepcopy()
     
     camels_moved_in_leg = new_state.get_n_racing_camels() + new_state.get_n_crazy_dice() - len(new_state.get_camels_to_move())
     
@@ -77,7 +76,7 @@ def simulate_leg_n_times(state,n):
     winners = np.zeros(state.get_n_racing_camels())
     
     for i in range(n):
-        final_state,_ = simulate_leg(state)
+        final_state,_ = simulate_leg(state,0)
         leader = final_state.get_leader()
         winners[leader] += 1
         
@@ -103,7 +102,7 @@ def simulate_race(state, output_all=False):
 
     '''
     
-    final_state = deepcopy(state)
+    final_state = state.deepcopy()
     
     all_states_list = [state]
     
@@ -158,8 +157,7 @@ def advance_camel(state):
     new_state : race_state
         State of the race after camel has moved.
     '''
-    
-    new_race_state = deepcopy(state)
+    new_race_state = state.deepcopy()
     
     camel_no = new_race_state.get_camels_to_move()[random.randint(0,len(new_race_state.get_camels_to_move())-1)]
     

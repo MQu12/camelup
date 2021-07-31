@@ -9,12 +9,13 @@ from camels import racing_camel, crazy_camel
 import random
 import constants
 import numpy as np
+import copy
 
 class race_state:
 
     def __init__(self, camel_list=None,
                  n_racing_camels=5, n_crazy_camels=2, n_crazy_dice = 1,
-                 track_length=16, leg_length=5, min_roll=1, max_roll=3):
+                 track_length=16, leg_length=5, min_roll=1, max_roll=3, reseed=True):
         '''
         Intialise the race state
 
@@ -46,8 +47,9 @@ class race_state:
 
         '''
         
-        random.seed(constants.RANDOM_SEED)
-        np.random.seed(constants.RANDOM_SEED)
+        if reseed:
+            random.seed(constants.RANDOM_SEED)
+            np.random.seed(constants.RANDOM_SEED)
         
         self.game_end = False
         
@@ -75,8 +77,9 @@ class race_state:
         self.num_moves = 0
         self.leg_winners = []
 
-        self.set_stack()
-        self.reset_leg()
+        if reseed:
+            self.set_stack()
+            self.reset_leg()
         
     def reset_leg(self):
         '''
@@ -305,6 +308,29 @@ class race_state:
     
     def __repr__(self):
         return str(self)
+
+    def deepcopy(self):
+        camel_list = []
+        for c in self.camel_list:
+            camel_list.append(c.deepcopy())
+        state = race_state(camel_list=camel_list, reseed=False)
+
+        state.leg_winners = copy.deepcopy(self.leg_winners)
+        state.camels_moved_this_leg = copy.deepcopy(self.camels_moved_this_leg)
+        state.camels_to_move = copy.deepcopy(self.camels_to_move)
+
+        state.game_end = self.game_end
+        state.track_length = self.track_length
+        state.leg_length = self.leg_length
+        state.min_roll = self.min_roll
+        state.max_roll = self.max_roll
+        state.n_crazy_dice = self.n_crazy_dice
+        state.leg_num = self.leg_num
+        state.num_moves = self.num_moves
+        state.racing_camel_count = self.racing_camel_count
+        state.crazy_camel_count = self.crazy_camel_count
+
+        return state
 
     def mark_camel_moved(self,camel_id):
         self.camels_moved_this_leg.append(camel_id)
