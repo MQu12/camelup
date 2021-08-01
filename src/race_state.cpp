@@ -292,6 +292,12 @@ std::ostream& operator<<(std::ostream& os, const race_state& r){
 void race_state::mark_camel_moved(int camel_no){
 
 	camels_moved_this_leg.push_back(camel_no);
-	camels_to_move.erase(std::remove(camels_to_move.begin(), camels_to_move.end(), camel_no), camels_to_move.end());
+
+	for(int i=0; i<camels_to_move.size(); i++){
+		if(camels_to_move[i]==camel_no){
+			camels_to_move.erase (camels_to_move.begin()+i);
+			break;
+		}
+	}
 
 }

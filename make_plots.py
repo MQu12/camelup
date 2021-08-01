@@ -125,6 +125,8 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
         plt.show()
     elif constants.PLOT_METHOD == 1:
         plt.savefig(f'plots/dump/race_state_move_{state.get_num_moves()}.png')
+
+    plt.close(fig1)
     
 def event_probability_sublpot(fig, shape, text, values, state):
     
