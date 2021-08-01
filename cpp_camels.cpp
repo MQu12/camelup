@@ -1,4 +1,5 @@
 #include <boost/python.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <Python.h>
 
 //items to export
@@ -27,8 +28,6 @@ BOOST_PYTHON_MODULE(cpp_camels)
     using namespace boost::python;
 
     to_python_converter<std::vector<int, std::allocator<int> >, VecToList<int> >();
-    to_python_converter<std::vector<camel*, std::allocator<camel*> >, VecToList<camel*> >();
-    //to_python_converter<std::vector<racing_camel*, std::allocator<racing_camel*> >, VecToList<racing_camel*> >();
 
     class_<camel, boost::noncopyable>("camel", no_init);
 
@@ -42,7 +41,7 @@ BOOST_PYTHON_MODULE(cpp_camels)
         .def(self_ns::str(self))
         .def(self_ns::repr(self));
 
-    class_<crazy_camel>("crazy_camel", init<int,int,int,int>())
+    class_<crazy_camel, bases<camel>>("crazy_camel", init<int,int,int,int>())
         .def(init<crazy_camel>())
         .def("direction", &crazy_camel::direction)
         .def_readwrite("id", &crazy_camel::id)
@@ -85,7 +84,4 @@ BOOST_PYTHON_MODULE(cpp_camels)
     class_<std::vector<camel*> >("PyVec")
          .def(vector_indexing_suite<std::vector<camel*> >())
     ;
-
-    implicitly_convertible<racing_camel*,camel*>();
-    //implicitly_convertible<camel,crazy_camel>();
 }
