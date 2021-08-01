@@ -105,12 +105,12 @@ def simulate_race(state, output_all=False):
     final_state = state.deepcopy()
     
     all_states_list = [state]
-    
+
     while not final_state.get_game_end():
         final_state, leg_states = simulate_leg(final_state, output_all)
         if output_all:
             all_states_list += leg_states
-        
+
     return final_state, all_states_list
 
 def simulate_n_races(state,n):
@@ -160,7 +160,7 @@ def advance_camel(state):
     new_race_state = state.deepcopy()
     
     camel_no = new_race_state.get_camels_to_move()[random.randint(0,len(new_race_state.get_camels_to_move())-1)]
-    
+
     roll = random.randint(new_race_state.get_min_roll(),new_race_state.get_max_roll())
 
     if camel_no != 'crazy' and camel_no != -1:

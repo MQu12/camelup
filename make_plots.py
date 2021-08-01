@@ -4,11 +4,14 @@ Created on Wed Jul  7 21:55:43 2021
 
 @author: Dr. P
 """
-
-from camels import racing_camel,crazy_camel
-from matplotlib import pyplot as plt
-from camelup import race_state
 import constants
+if constants.USE_CPP_CLASSES:
+    from cpp_camels import race_state, racing_camel, crazy_camel
+else:
+    from camels import racing_camel,crazy_camel
+    from camelup import race_state
+
+from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -45,8 +48,10 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
     axis_main.text(0.02,0.95,f'Leg {state.get_leg_num()}', transform=axis_main.transAxes)
     axis_main.text(0.02,0.90,f'After {state.get_num_moves()} moves', transform=axis_main.transAxes)
     
-    for camel in state.get_camel_list():
+    for i in range(len(state.get_camel_list())):
         
+        camel = state.get_camel_list()[i]
+
         if type(camel) == racing_camel:
             col = constants.RACING_COLOURS[camel.id]
             axis_main.scatter(camel.position+0.2,camel.stack_position,color=col,s=camel_size,marker=constants.racingCamelMarker)
@@ -73,7 +78,7 @@ def plot_state(state, leg_win_probs=None, race_win_probs=None, race_lose_probs=N
                     s=300,color=constants.RACING_COLOURS[:state.get_n_racing_camels()]+['black'],marker=constants.racingCamelMarker)
         
         for unmoved_camel in state.get_camels_to_move():
-            if unmoved_camel == 'crazy':
+            if unmoved_camel == 'crazy' or unmoved_camel == -1:
                 camel_display.drop(state.get_n_racing_camels(),inplace=True)
             else:
                 camel_display.drop(unmoved_camel,inplace=True)
@@ -194,7 +199,8 @@ def plot_movement_per_camel(final_state):
     
     movement_array = []
     
-    for camel in final_state.get_camel_list():
+    for i in range(len(final_state.get_camel_list())):
+        camel = final_state.get_camel_list()[i]
         if type(camel) == racing_camel:
             movement_array.append(camel.total_movement)
 
@@ -225,7 +231,8 @@ def plot_move_efficiency_per_camel(final_state):
     movement_array = []
     distance_array = []
     
-    for camel in final_state.get_camel_list():
+    for i in range(len(final_state.get_camel_list())):
+        camel = final_state.get_camel_list()[i]
         if type(camel) == racing_camel:
             movement_array.append(camel.total_movement)
             distance_array.append(camel.position)

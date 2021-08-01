@@ -11,6 +11,7 @@
 
 race_state::race_state(int n_racing_camels, int n_crazy_camels, int n_crazy_dice, int track_length,int leg_length,int min_roll,int max_roll) :
 	n_racing_camels(n_racing_camels),
+	n_crazy_camels(n_crazy_camels),
 	n_crazy_dice(n_crazy_dice),
 	track_length(track_length),
 	leg_length(leg_length),
@@ -201,7 +202,8 @@ int race_state::pick_crazy_camel() const{
 	else if(sum_carrying > 1){
 		std::vector<int> carrying_camels_id;
 		for(int i=0; i<n_crazy_camels; i++){
-			crazy_camels_carrying.push_back(i);
+			if (crazy_camels_carrying[i])
+				carrying_camels_id.push_back(i);
 		}
 		int rand_id = rand()%sum_carrying;
 		return carrying_camels_id[rand_id];

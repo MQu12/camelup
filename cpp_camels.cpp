@@ -84,4 +84,5 @@ BOOST_PYTHON_MODULE(cpp_camels)
     class_<std::vector<camel*> >("PyVec")
          .def(vector_indexing_suite<std::vector<camel*> >())
     ;
+
 }
