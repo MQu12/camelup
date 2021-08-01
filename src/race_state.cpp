@@ -76,7 +76,6 @@ race_state::~race_state(){
 
 	}
 	camel_vec.clear();
-
 }
 race_state race_state::deepcopy() const{
 
@@ -90,6 +89,7 @@ void race_state::reset_leg(){
 		leg_winners.push_back(get_leader());
 	}
 	
+	camels_to_move.clear();
 	for(int i=0; i<n_racing_camels; i++){
 		camels_to_move.push_back(i);
 	}

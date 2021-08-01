@@ -13,7 +13,7 @@ struct camel{
 
 	camel(int _id, int _position, int _stack_position=0, int _total_movement=0);
 	camel(const camel &c);
-	~camel(){}
+	~camel(){std::cout<<"Destroying camel"<<std::endl;}
 	virtual int direction() = 0;
 	virtual std::string camel_type() const = 0;
 	virtual camel* copy() const = 0;

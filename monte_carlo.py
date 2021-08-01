@@ -162,8 +162,8 @@ def advance_camel(state):
     camel_no = new_race_state.get_camels_to_move()[random.randint(0,len(new_race_state.get_camels_to_move())-1)]
     
     roll = random.randint(new_race_state.get_min_roll(),new_race_state.get_max_roll())
-    
-    if camel_no != 'crazy':
+
+    if camel_no != 'crazy' and camel_no != -1:
         # advance racing camel
         camel = new_race_state.get_camel_list()[camel_no]
         final_pos = camel.position + roll
