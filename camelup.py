@@ -40,6 +40,8 @@ class race_state:
             Min dice roll value. The default is 1.
         max_roll : int, optional
             Max dice roll value. The default is 3.
+        reseed : bool, optional
+            When copyingm set to true to avoid reseeding rand and resetting stacks and legs
 
         Returns
         -------
@@ -333,6 +335,7 @@ class race_state:
         return state
 
     def mark_camel_moved(self,camel_id):
+        self.camels_to_move.remove(camel_id)
         self.camels_moved_this_leg.append(camel_id)
     def get_game_end(self):
         return self.game_end

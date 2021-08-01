@@ -106,7 +106,7 @@ def simulate_race(state, output_all=False):
     
     all_states_list = [state]
     
-    while not final_state.game_end:
+    while not final_state.get_game_end():
         final_state, leg_states = simulate_leg(final_state, output_all)
         if output_all:
             all_states_list += leg_states
@@ -175,8 +175,7 @@ def advance_camel(state):
         camel = new_race_state.get_camel_list()[new_race_state.get_n_racing_camels()+crazy_camel_no]
         final_pos = camel.position - roll
         new_race_state.move_camel_to(new_race_state.get_n_racing_camels()+crazy_camel_no, final_pos)
-    
-    new_race_state.get_camels_to_move().remove(camel_no)
+        
     new_race_state.mark_camel_moved(camel_no)
     
     return new_race_state

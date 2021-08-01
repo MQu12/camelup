@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "camel.h"
+#include "racing_camel.h"
 
 class race_state{
 
@@ -57,6 +58,8 @@ public:
 	std::vector<int> get_camels_moved_this_leg() const{return camels_moved_this_leg;}
 	std::vector<int> get_leg_winners() const{return leg_winners;}
 	std::vector<camel*> get_camel_list() const{return camel_vec;}
+
+	camel* getCamel(){return new racing_camel(0,0);}
 
 	friend std::ostream& operator<<(std::ostream& os, const race_state& r);
 

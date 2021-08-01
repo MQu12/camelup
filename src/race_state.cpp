@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <bits/stdc++.h>
 #include <stdexcept>
+#include <algorithm>
 #include "race_state.h"
 #include "camel.h"
 #include "racing_camel.h"
@@ -62,9 +63,9 @@ race_state::race_state(const race_state &r){
 	n_racing_camels = r.n_racing_camels;
 	n_crazy_camels = r.n_crazy_camels;
 
-	std::vector<int> leg_winners = std::vector<int>(r.leg_winners);
-	std::vector<int> camels_moved_this_leg = std::vector<int>(r.camels_moved_this_leg);
-	std::vector<int> camels_to_move = std::vector<int>(r.camels_to_move);
+	leg_winners = std::vector<int>(r.leg_winners);
+	camels_moved_this_leg = std::vector<int>(r.camels_moved_this_leg);
+	camels_to_move = std::vector<int>(r.camels_to_move);
 
 }
 race_state::~race_state(){
@@ -289,5 +290,6 @@ std::ostream& operator<<(std::ostream& os, const race_state& r){
 void race_state::mark_camel_moved(int camel_no){
 
 	camels_moved_this_leg.push_back(camel_no);
+	camels_to_move.erase(std::remove(camels_to_move.begin(), camels_to_move.end(), camel_no), camels_to_move.end());
 
 }
