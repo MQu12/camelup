@@ -11,7 +11,7 @@ Ever wondered whether the board game *Camel Up* is every bit as random as it fee
 
 ## Installation using Anaconda
 1. Clone repository
-2. Create evironment `conda env create -f environment.yml`
+2. From the base directory, create evironment `conda env create -f environment.yml`
 3. Activate environment `conda activate camelup`
 
 ## Basic usage
@@ -20,7 +20,8 @@ Ever wondered whether the board game *Camel Up* is every bit as random as it fee
 
 ## Slightly more advanced usage
 Save plots by opening constants.py and setting `PLOT_METHOD = 1`
-Running race_baseline.py on the command line will now save the plots
+
+Running race_baseline.py will now save the plots
 
 ## Even more advanced usage
 Use compiled C++ modules for extra performance. This currently only works in linux environments.
