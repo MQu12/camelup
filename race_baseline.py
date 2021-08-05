@@ -17,7 +17,6 @@ else:
 
 
 constants.RANDOM_SEED = 420
-constants.PLOT_METHOD = 1
 
 start_time = time.time()
 
