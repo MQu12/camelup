@@ -13,9 +13,6 @@ class camel:
         self.stack_position = stack_position
         self.total_movement = 0
         
-    def camel_direction(self):
-        raise NotImplementedError
-        
     def __str__(self):
         return f'{self.__class__.__name__} no {self.id} at {self.position}, y = {self.stack_position}'
     
@@ -37,9 +34,6 @@ class racing_camel(camel):
         c = racing_camel(self.id,self.position,self.stack_position)
         c.total_movement = self.total_movement
         return c
-
-    def camel_direction(self):
-        return 1
     
 class crazy_camel(camel):
 
@@ -47,7 +41,4 @@ class crazy_camel(camel):
         c = crazy_camel(self.id,self.position,self.stack_position)
         c.total_movement = self.total_movement
         return c
-
-    def camel_direction(self):
-        return -1
     

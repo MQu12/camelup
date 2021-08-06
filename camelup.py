@@ -41,7 +41,7 @@ class race_state:
         max_roll : int, optional
             Max dice roll value. The default is 3.
         reseed : bool, optional
-            When copyingm set to true to avoid reseeding rand and resetting stacks and legs
+            When copying set to true to avoid reseeding rand and resetting stacks and legs
 
         Returns
         -------

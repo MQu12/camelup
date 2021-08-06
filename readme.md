@@ -14,6 +14,9 @@ Ever wondered whether the board game *Camel Up* is every bit as random as it fee
 2. From the base directory, create evironment `conda env create -f environment.yml`
 3. Activate environment `conda activate camelup`
 
+### On each login
+`conda activate camelup`
+
 ## Basic usage
 1. Run race_baseline.py in your favourite IDE
 2. Profit
@@ -25,6 +28,8 @@ Running race_baseline.py will now save the plots
 
 ## Even more advanced usage
 Use compiled C++ modules for extra performance. This currently only works in linux environments.
+
+Requires boost C++ libraries to be installed.
 1. Compile the library with `make`
 2. In constants.py set `USE_CPP_CLASSES = True`
 3. Use is the same before, e.g. `python race_baseline.py` will do the same as previously but quicker

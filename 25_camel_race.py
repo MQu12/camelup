@@ -14,7 +14,6 @@ else:
     from camelup import race_state
 
 constants.RANDOM_SEED = 420
-constants.PLOT_METHOD = 1
 
 print('Initialising race')
 bigstate = race_state(20,8,4,100,20,1,3)

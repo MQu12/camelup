@@ -8,7 +8,7 @@ Created on Sat Jul 10 08:34:22 2021
 # 0 = show, 1 = save
 PLOT_METHOD = 0
 
-USE_CPP_CLASSES = True
+USE_CPP_CLASSES = False
 
 from svgpath2mpl import parse_path
 
@@ -61,10 +61,3 @@ RACING_COLOURS = ['red',
                   'darkgreen'
                   ]
 CRAZY_COLOURS = ['black','white','gray','darkgray','lightgray','silver','grey','whitesmoke']
-
-def printcols():
-    import matplotlib.pyplot as plt
-    for col in RACING_COLOURS:
-        plt.bar(0,1,color=col)
-        plt.text(0,0.5,col)
-        plt.show()
