@@ -5,15 +5,18 @@ Created on Wed Jul 14 22:08:51 2021
 @author: Dr. P
 """
 
-from camelup import race_state
 import monte_carlo
 import make_plots
 import constants
+if constants.USE_CPP_CLASSES:
+    from cpp_camels import race_state
+else:
+    from camelup import race_state
 
-constants.RANDOM_SEED = 4
+constants.RANDOM_SEED = 420
 
 print('Initialising race')
-bigstate = race_state(n_racing_camels=20,n_crazy_camels=8,n_crazy_dice=4,track_length=100,leg_length=20)
+bigstate = race_state(20,8,4,100,20,1,3)
 
 race_winners_list = []
 race_losers_list = []
@@ -39,9 +42,9 @@ for state in all_states_list:
     race_losers_list.append(race_losers)
     leg_winners_list.append(leg_winners)
     
-make_plots.plot_area(race_winners_list)
-make_plots.plot_area(race_losers_list)
-make_plots.plot_area(leg_winners_list)
+make_plots.plot_area(race_winners_list,'winners')
+make_plots.plot_area(race_losers_list,'losers')
+make_plots.plot_area(leg_winners_list,'legwinners')
 make_plots.plot_movement_per_camel(final_state)
 make_plots.plot_move_efficiency_per_camel(final_state)
 make_plots.plot_leg_winners(final_state)

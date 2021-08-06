@@ -5,6 +5,11 @@ Created on Sat Jul 10 08:34:22 2021
 @author: Dr. P
 """
 
+# 0 = show, 1 = save
+PLOT_METHOD = 0
+
+USE_CPP_CLASSES = False
+
 from svgpath2mpl import parse_path
 
 racingCamelMarker = parse_path("""M1047 1740 c-97 -25 -153 -75 -257 -231 -104 -156 -143 -189 -227
@@ -56,10 +61,3 @@ RACING_COLOURS = ['red',
                   'darkgreen'
                   ]
 CRAZY_COLOURS = ['black','white','gray','darkgray','lightgray','silver','grey','whitesmoke']
-
-def printcols():
-    import matplotlib.pyplot as plt
-    for col in RACING_COLOURS:
-        plt.bar(0,1,color=col)
-        plt.text(0,0.5,col)
-        plt.show()

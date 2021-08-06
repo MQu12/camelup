@@ -5,12 +5,20 @@ Created on Fri Jul  9 22:00:22 2021
 @author: Dr. P
 """
 
-from camelup import race_state
+import time
+import constants
 import monte_carlo
 import make_plots
-import constants
+
+if constants.USE_CPP_CLASSES:
+    from cpp_camels import race_state
+else:
+    from camelup import race_state
+
 
 constants.RANDOM_SEED = 420
+
+start_time = time.time()
 
 state = race_state()
 
@@ -28,5 +36,11 @@ for state in all_states_list:
     race_winners_list.append(race_winners)
     race_losers_list.append(race_losers)
     
-make_plots.plot_area(race_winners_list)
-make_plots.plot_area(race_losers_list)
+make_plots.plot_area(race_winners_list,'winners')
+make_plots.plot_area(race_losers_list,'losers')
+make_plots.plot_movement_per_camel(final_state)
+make_plots.plot_move_efficiency_per_camel(final_state)
+make_plots.plot_leg_winners(final_state)
+make_plots.plot_leg_wins_per_camel(final_state)
+
+print(f'Ran script in {time.time() - start_time}s')

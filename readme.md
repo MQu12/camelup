@@ -9,11 +9,30 @@ Ever wondered whether the board game *Camel Up* is every bit as random as it fee
 - Plot win chance vs turn for each camel.
 - Amaze your friends!
 
-## Installation
+## Installation using Anaconda
 1. Clone repository
-2. Do conda
-3. Work out what dependencies you need to install (sorry)
+2. From the base directory, create evironment `conda env create -f environment.yml`
+3. Activate environment `conda activate camelup`
 
-## Usage
-1. Just run race_baseline.py in your favourite IDE
+### On each login
+`conda activate camelup`
+
+## Basic usage
+1. Run race_baseline.py in your favourite IDE
 2. Profit
+
+## Slightly more advanced usage
+Save plots by opening constants.py and setting `PLOT_METHOD = 1`
+
+Running race_baseline.py will now save the plots
+
+## Even more advanced usage
+Use compiled C++ modules for extra performance. This currently only works in linux environments.
+
+Requires boost C++ libraries to be installed.
+1. Compile the library with `make`
+2. In constants.py set `USE_CPP_CLASSES = True`
+3. Use is the same before, e.g. `python race_baseline.py` will do the same as previously but quicker
+
+#### Disclaimer
+By using this code, you agree that if the game is ruined for you it's your own fault.

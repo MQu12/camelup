@@ -9,12 +9,13 @@ from camels import racing_camel, crazy_camel
 import random
 import constants
 import numpy as np
+import copy
 
 class race_state:
 
     def __init__(self, camel_list=None,
                  n_racing_camels=5, n_crazy_camels=2, n_crazy_dice = 1,
-                 track_length=16, leg_length=5, min_roll=1, max_roll=3):
+                 track_length=16, leg_length=5, min_roll=1, max_roll=3, reseed=True):
         '''
         Intialise the race state
 
@@ -39,6 +40,8 @@ class race_state:
             Min dice roll value. The default is 1.
         max_roll : int, optional
             Max dice roll value. The default is 3.
+        reseed : bool, optional
+            When copying set to true to avoid reseeding rand and resetting stacks and legs
 
         Returns
         -------
@@ -46,8 +49,9 @@ class race_state:
 
         '''
         
-        random.seed(constants.RANDOM_SEED)
-        np.random.seed(constants.RANDOM_SEED)
+        if reseed:
+            random.seed(constants.RANDOM_SEED)
+            np.random.seed(constants.RANDOM_SEED)
         
         self.game_end = False
         
@@ -75,8 +79,9 @@ class race_state:
         self.num_moves = 0
         self.leg_winners = []
 
-        self.set_stack()
-        self.reset_leg()
+        if reseed:
+            self.set_stack()
+            self.reset_leg()
         
     def reset_leg(self):
         '''
@@ -200,11 +205,11 @@ class race_state:
         
         crazy_camel_list = [camel for camel in self.camel_list[self.racing_camel_count:]]
         
-        # check if either crazy camel is carrying any racing camels
+        # check if any crazy camel is carrying any racing camels
         crazy_camels_carrying = np.zeros(len(crazy_camel_list), dtype=bool)
         
         for i in range(0,self.racing_camel_count):
-            #camels not in a stack cannpt be being carried
+            #camels not in a stack cannot be being carried
             if self.camel_list[i].stack_position == 0:
                 continue
             for j, crazy_camel_j in enumerate(crazy_camel_list):
@@ -305,3 +310,58 @@ class race_state:
     
     def __repr__(self):
         return str(self)
+
+    def deepcopy(self):
+        camel_list = []
+        for c in self.camel_list:
+            camel_list.append(c.deepcopy())
+        state = race_state(camel_list=camel_list, reseed=False)
+
+        state.leg_winners = copy.deepcopy(self.leg_winners)
+        state.camels_moved_this_leg = copy.deepcopy(self.camels_moved_this_leg)
+        state.camels_to_move = copy.deepcopy(self.camels_to_move)
+
+        state.game_end = self.game_end
+        state.track_length = self.track_length
+        state.leg_length = self.leg_length
+        state.min_roll = self.min_roll
+        state.max_roll = self.max_roll
+        state.n_crazy_dice = self.n_crazy_dice
+        state.leg_num = self.leg_num
+        state.num_moves = self.num_moves
+        state.racing_camel_count = self.racing_camel_count
+        state.crazy_camel_count = self.crazy_camel_count
+
+        return state
+
+    def mark_camel_moved(self,camel_id):
+        self.camels_to_move.remove(camel_id)
+        self.camels_moved_this_leg.append(camel_id)
+    def get_game_end(self):
+        return self.game_end
+    def get_n_crazy_camels(self):
+        return self.crazy_camel_count
+    def get_n_racing_camels(self):
+        return self.racing_camel_count
+    def get_n_crazy_dice(self):
+        return self.n_crazy_dice
+    def get_leg_length(self):
+        return self.leg_length
+    def get_min_roll(self):
+        return self.min_roll
+    def get_max_roll(self):
+        return self.max_roll
+    def get_leg_num(self):
+        return self.leg_num
+    def get_num_moves(self):
+        return self.num_moves
+    def get_track_length(self):
+        return self.track_length
+    def get_camels_to_move(self):
+        return self.camels_to_move
+    def get_camels_moved_this_leg(self):
+        return self.camels_moved_this_leg
+    def get_leg_winners(self):
+        return self.leg_winners
+    def get_camel_list(self):
+        return self.camel_list
